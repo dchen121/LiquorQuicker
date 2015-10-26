@@ -1,5 +1,6 @@
 {% if user.is_authenticated %}
 <h1>{{ user.username }}</h1>
+<img src="{{ user.avatar.url }}" />
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 {% else %}
 <h1>Please log in or create a profile to view your profile</h1>
