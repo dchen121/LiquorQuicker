@@ -21,6 +21,13 @@ function initMap() {
     center: {lat: 49.2561055, lng: -123.1939531},
     zoom: 11
   });
+
+  {% for location in locations_list %}
+    var marker = new google.maps.Marker({
+      map: map,
+      position: {'lat': {{ location.latitude }}, 'lng': {{ location.longitude }} }
+    });
+  {% endfor %}
 }
 
     </script>
