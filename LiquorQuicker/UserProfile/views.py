@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login
+from .forms import SignUpForm
 
 
 class ProfileView(TemplateView):
@@ -49,3 +50,16 @@ def auth_user(request):
     else:
         # TODO: Inform user login failed
         return HttpResponseRedirect(reverse('profile:login'))
+
+def sign_up(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.set_password(user.password)
+            if 'avatar' in request.FILES:
+                user.avatar = request.FILES['avatar']
+            user.save()
+    else:
+        form = SignUpForm()
+    return render(request, 'UserProfile/signup.html', {"form": form})

@@ -1,0 +1,19 @@
+{% load staticfiles %}
+
+<h1> Register here </h1>
+
+{% if user.is_authenticated%}
+{%if user.avatar%}
+ <img src = "{{user.avatar.url}}" width = "200"/>
+ {%else%}
+ You don't have an image
+{%endif%}
+ {% else %}
+ 	You aren't logged in
+{%endif%}
+
+<form method = "POST" action = "" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{form.as_p}}
+	<input type = "submit">
+</form>
