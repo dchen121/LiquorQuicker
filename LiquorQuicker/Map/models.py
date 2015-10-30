@@ -1,11 +1,22 @@
 from django.db import models
 
-# Create your models here.
 
-class Location(models.Model):
-	address = models.CharField(max_length=200)
-	store_name = models.CharField(max_length=200)	
+class LiquorLocation(models.Model):
+    store_name = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    city = models.CharField(max_length=100)
 
-	def __str__(self):
-		return self.store_name
+    def __str__(self):
+        return self.store_name
 
+
+class PrivateStore(LiquorLocation):
+    pass
+
+
+class BCLiquorStore(LiquorLocation):
+    post_code = models.CharField(max_length=7)
+
+
+class RuralAgencyStore(LiquorLocation):
+    post_code = models.CharField(max_length=7)
