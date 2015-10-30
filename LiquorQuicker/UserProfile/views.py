@@ -56,7 +56,11 @@ def sign_up(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit = False)
+            user.set_password(user.password)
+            if 'avatar' in request.FILES:
+                user.avatar = request.FILES['avatar']
+            user.save()
     else:
         form = SignUpForm()
     return render(request, 'UserProfile/signup.html', {"form": form})
