@@ -3,11 +3,10 @@
 <h1> Register here </h1>
 
 {% if user.is_authenticated%}
-{%if user.avatar%}
- <img src = "{{user.avatar.url}}" width = "200"/>
- {%else%}
- You don't have an image
+{% if user.is_anonymous%}
+	User is anonymous
 {%endif%}
+	<img src = "{{MEDIA_ROOT}}/profile/{{user.username}}">
  {% else %}
  	You aren't logged in
 {%endif%}

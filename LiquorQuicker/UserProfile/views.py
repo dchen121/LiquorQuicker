@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login
 from .forms import SignUpForm
+from django.contrib import messages
 
 
 class ProfileView(TemplateView):
@@ -53,13 +54,9 @@ def auth_user(request):
 
 def sign_up(request):
     if request.method == "POST":
-        form = SignUpForm(request.POST, request.FILES)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save(commit = False)
-            user.set_password(user.password)
-            if 'avatar' in request.FILES:
-                user.avatar = request.FILES['avatar']
-            user.save()
+            user = form.save()
     else:
         form = SignUpForm()
     return render(request, 'UserProfile/signup.html', {"form": form})
