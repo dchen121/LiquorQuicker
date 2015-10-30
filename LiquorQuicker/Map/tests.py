@@ -20,6 +20,14 @@ class ParserTests(TestCase):
         self.assertEqual(Parser.clean_data(city, 'city'), '100 Mile House')
         self.assertEqual(Parser.clean_data(address, 'address'), '365 S Cariboo Hwy')
 
+    def test_if_only_unique_data_input(self):
+        store = PrivateStore(store_name='TESTING TESTING', address='365 S Cariboo Hwy', city='100 Mile House')
+        store.save()
+        Parser()
+        store = PrivateStore.objects.get(address='365 S Cariboo Hwy')
+
+        self.assertEqual(store.store_name, 'Lakewood Inn')
+
     def test_if_data_is_retrieved(self):
         Parser()
 
