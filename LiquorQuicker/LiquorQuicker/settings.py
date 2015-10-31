@@ -119,3 +119,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Custom User class
 AUTH_USER_MODEL = 'UserProfile.LQUser'
 
+# Google Maps API Key
+GMAPS_API_KEY = 'AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY'
+
