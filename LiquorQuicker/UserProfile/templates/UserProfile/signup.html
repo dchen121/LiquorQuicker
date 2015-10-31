@@ -1,16 +1,6 @@
 {% load staticfiles %}
 
 <h1> Register here </h1>
-
-{% if user.is_authenticated%}
-{% if user.is_anonymous%}
-	User is anonymous
-{%endif%}
-	<img src = "{{MEDIA_ROOT}}/profile/{{user.username}}">
- {% else %}
- 	You aren't logged in
-{%endif%}
-
 <form method = "POST" action = "" enctype="multipart/form-data">
 	{% csrf_token %}
 	{{form.as_p}}

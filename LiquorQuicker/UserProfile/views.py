@@ -53,14 +53,19 @@ def auth_user(request):
         return HttpResponseRedirect(reverse('profile:login'))
 
 def sign_up(request):
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.set_password(user.password)
-            if 'avatar' in request.FILES:
-                user.avatar = request.FILES['avatar']
-            user.save()
-    else:
-        form = SignUpForm()
+    if request.method == 'POST':
+        return register(request)
+    form = SignUpForm()
     return render(request, 'UserProfile/signup.html', {"form": form})
+
+def register(request):
+    form = SignUpForm(request.POST)
+    if form.is_valid():
+        user = form.save(commit = False)
+        user.set_password(user.password)
+        if 'avatar' in request.FILES:
+            user.avatar = request.FILES['avatar']
+        user.save()
+        return redirect('map:map')
+    else:
+        return redirect('profile:signup')
