@@ -20,19 +20,6 @@ class LiquorLocation(models.Model):
             lat_lng = results[0]['geometry']['location']
             return lat_lng
 
-
-    # Overriding save() to get latitude and longitude automatically instead of manually filling in
-    def save(self, *args, **kwargs):
-        lat_long = self.get_lat_long()
-        if lat_long:
-            self.latitude = lat_long['lat']
-            self.longitude = lat_long['lng']
-            print ("Geocode successful")
-        else:
-            print ("Bad Geocode")
-        super(LiquorLocation, self).save(*args, **kwargs)
-
-
 class PrivateStore(LiquorLocation):
     pass
 
