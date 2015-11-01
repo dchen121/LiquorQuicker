@@ -14,5 +14,5 @@ class MapView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MapView, self).get_context_data(**kwargs)
         context['geocode_locations'] = serializers.serialize("json", LiquorLocation.objects.filter(latitude__isnull=True))
-        context['init_locations'] = LiquorLocation.objects.filter(city__icontains='Vancouver').exclude(latitude__isnull=True).exclude(longitude__isnull=True)
+        context['init_locations'] = serializers.serialize("json", LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True))
         return context
