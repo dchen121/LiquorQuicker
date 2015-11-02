@@ -1,35 +1,4 @@
-{%load staticfiles%}
-
-<!DOCTYPE html>
-<html>
-  <head>
-
-  <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-
-<link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
-
-  </head>
-  <body>
-      <header class = "page-header">Welcome to LiquorQuicker!</header>
-      <nav >
-          {%if user.is_authenticated%}
-          <a href = "{% url 'profile:profile' %}"> My Profile </a>
-          {%else %}
-          <ul>
-            <li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
-            <li><a href = "{% url 'profile:signup' %}"> Register</a></li>
-          </ul>
-       {%endif%}
-      </nav>
-    <div id="map"></div>
-    <script type="text/javascript">
+<script type="text/javascript">
 
 var map;
 var delay = 0;
@@ -107,9 +76,7 @@ function geocodeAndPlotLocations() {
 }
 
 
-    </script>
+</script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY&callback=initMap">
     </script>
-  </body>
-</html>
