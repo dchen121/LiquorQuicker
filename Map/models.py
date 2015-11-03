@@ -2,6 +2,7 @@ from django.db import models
 from googlemaps import Client, geocoding
 from django.conf import settings
 
+
 class LiquorLocation(models.Model):
     store_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
@@ -19,6 +20,7 @@ class LiquorLocation(models.Model):
         if results:
             lat_lng = results[0]['geometry']['location']
             return lat_lng
+
 
 class PrivateStore(LiquorLocation):
     pass

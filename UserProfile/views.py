@@ -3,8 +3,8 @@ from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
+
 from .forms import SignUpForm
-from django.contrib import messages
 
 
 class ProfileView(TemplateView):

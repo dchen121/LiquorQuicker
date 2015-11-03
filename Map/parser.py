@@ -14,7 +14,7 @@ class Parser:
     urls = [('http://goo.gl/7AI4ip', RuralAgencyStore),
             ('http://goo.gl/88yxeJ', BCLiquorStore),
             ('http://goo.gl/730MnE', PrivateStore)]
-    formatting = {'address': r'(Physical: )?([0-9]{3,5} [A-Za-z0-9\-. ]*)( Mailing:)?',
+    formatting = {'address': r'(Physical: )?([0-9]{3,5} [A-Za-z0-9\-.# ]*)( Mailing:)?',
                   'post_code': r'()?([A-Z][0-9][A-Z] ?[0-9][A-Z][0-9])()?'}
 
     def __init__(self):
@@ -34,6 +34,7 @@ class Parser:
         :param model: A class from the models module
         """
         with urlopen(url) as content:
+            model.objects.all().delete()
             csv = TextIOWrapper(content, encoding='cp1252')
             data = DictReader(csv)
 
