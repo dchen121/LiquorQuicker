@@ -41,7 +41,9 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
   
   plotLocations(initLocations);
-  geocodeAndPlotLocations();
+  if (geocodeLocations.length > 0) {
+    geocodeAndPlotLocations();
+  }
   }
 
 // used code from http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
