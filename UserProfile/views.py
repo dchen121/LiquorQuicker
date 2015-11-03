@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import SignUpForm
@@ -22,6 +22,24 @@ class Login(TemplateView):
     A form for logging a user into the app
     """
     template_name = 'UserProfile/login.html'
+
+
+class SignUp(FormView):
+    """
+    A form for signing a user up
+    """
+    template_name = 'UserProfile/signup.html'
+    form_class = SignUpForm
+    success_url = reverse_lazy('map:map')
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.set_password(user.password)
+        if 'avatar' in self.request.FILES:
+            user.avatar = self.request.FILES['avatar']
+        user.save()
+        auth_user(self.request)
+        return super(SignUp, self).form_valid(form)
 
 
 # from django docs
@@ -48,28 +66,5 @@ def auth_user(request):
         return HttpResponseRedirect(reverse('profile:login'))
 
 
-def sign_up(request):
-    if request.method == 'POST':
-        return register(request)
-    form = SignUpForm()
-    return render(request, 'UserProfile/signup.html', {"form": form})
-
-
-def register(request):
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        user = form.save(commit=False)
-        user.set_password(user.password)
-        if 'avatar' in request.FILES:
-            user.avatar = request.FILES['avatar']
-        user.save()
-        new_user = authenticate(username=request.POST['username'],
-                                    password=request.POST['password'])
-        login(request, new_user)
-        return redirect('map:map')
-    else:
-        return redirect('profile:signup')
-
-def logout_view(request):
-    logout(request)
-    return redirect('map:map')
+def logout(request):
+    pass

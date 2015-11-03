@@ -20,4 +20,4 @@ class LQUser(AbstractUser):
         swappable = 'AUTH_USER_MODEL'
 
     def __str__(self):
-        return self.screen_name
+        return self.username

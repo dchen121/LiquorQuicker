@@ -1,6 +1,8 @@
 {% if user.is_authenticated %}
 <center><h1>{{ user.username }}</h1></center>
+{% if user.avatar %}
 <center><img src="{{ user.avatar.url }}" /></center>
+{% endif %}
 <center><h2>{{ user.first_name }} {{ user.last_name }}</h2></center>
 {% else %}
 <center><h1>Please log in or create a profile to view your profile</h1></center>
