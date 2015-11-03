@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .forms import SignUpForm
 from django.contrib import messages
 
@@ -72,3 +72,7 @@ def register(request):
         return redirect('map:map')
     else:
         return redirect('profile:signup')
+
+def logout_view(request):
+    logout(request)
+    return redirect('map:map')
