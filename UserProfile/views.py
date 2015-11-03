@@ -66,5 +66,6 @@ def auth_user(request):
         return HttpResponseRedirect(reverse('profile:login'))
 
 
-def logout(request):
-    pass
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('map:map'))
