@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -24,11 +24,6 @@ class Login(TemplateView):
     template_name = 'UserProfile/login.html'
 
 
-class CreateView(TemplateView):
-    # TODO: create a page for creating a user profile
-    pass
-
-
 # from django docs
 def auth_user(request):
     """
@@ -52,16 +47,18 @@ def auth_user(request):
         # TODO: Inform user login failed
         return HttpResponseRedirect(reverse('profile:login'))
 
+
 def sign_up(request):
     if request.method == 'POST':
         return register(request)
     form = SignUpForm()
     return render(request, 'UserProfile/signup.html', {"form": form})
 
+
 def register(request):
     form = SignUpForm(request.POST)
     if form.is_valid():
-        user = form.save(commit = False)
+        user = form.save(commit=False)
         user.set_password(user.password)
         if 'avatar' in request.FILES:
             user.avatar = request.FILES['avatar']
