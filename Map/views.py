@@ -9,7 +9,7 @@ class MapView(TemplateView):
     """
     A view of the Map
     """
-    template_name = 'Map/map.html'
+    template_name = 'Map/homepage.html'
 
     def get_context_data(self, **kwargs):
         context = super(MapView, self).get_context_data(**kwargs)

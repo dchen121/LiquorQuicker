@@ -19,14 +19,8 @@
   <body>
       <h1 class = "page-header">Welcome to LiquorQuicker!</h1>
       <nav >
-          {%if user.is_authenticated%}
-          <a href = "{% url 'profile:profile' %}"> My Profile </a>
-          {%else %}
-          <ul>
-            <li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
-            <li><a href = "{% url 'profile:signup' %}"> Register</a></li>
-          </ul>
-       {%endif%}
+          {%block header%}
+          {%endblock header%}
       </nav>
     <div id="map"></div>
     <script type="text/javascript">
