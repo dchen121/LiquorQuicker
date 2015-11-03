@@ -1,6 +1,9 @@
 {% if user.is_authenticated %}
-<h1>{{ user.username }}</h1>
-<h2>{{ user.first_name }} {{ user.last_name }}</h2>
+<center><h1>{{ user.username }}</h1></center>
+<center><img src="{{ user.avatar.url }}" /></center>
+<center><h2>{{ user.first_name }} {{ user.last_name }}</h2></center>
 {% else %}
-<h1>Please log in or create a profile to view your profile</h1>
+<center><h1>Please log in or create a profile to view your profile</h1></center>
+<center><a href=/accounts/signup>Signup</a></center>
+<center><a href=login>Login</a></center>
 {% endif %}
