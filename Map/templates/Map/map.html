@@ -95,7 +95,7 @@ function plotLocations(locations) {
 }
 
 function geocodeAndPlotLocations() {
-  if (i < 50 && attempts < 3) {
+  if (i < geocodeLocations.length && attempts < 3) {
     setTimeout(function() { 
       geocodeAddress(geocodeLocations[i], geocodeAndPlotLocations)
     }, delay);

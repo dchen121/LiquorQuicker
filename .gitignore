@@ -2,3 +2,5 @@
 *.DS_Store
 /venv/
 *.pyc
+/media/
+db.sqlite3
