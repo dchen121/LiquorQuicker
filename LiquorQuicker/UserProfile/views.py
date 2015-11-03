@@ -66,6 +66,9 @@ def register(request):
         if 'avatar' in request.FILES:
             user.avatar = request.FILES['avatar']
         user.save()
+        new_user = authenticate(username=request.POST['username'],
+                                    password=request.POST['password'])
+        login(request, new_user)
         return redirect('map:map')
     else:
         return redirect('profile:signup')

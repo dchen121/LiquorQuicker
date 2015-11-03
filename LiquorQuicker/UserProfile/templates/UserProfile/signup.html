@@ -25,8 +25,7 @@
                             <div class="panel-title">Sign Up</div>
                         </div>  
                         <div class="panel-body" >
-                            <form id="signupform" class="form-horizontal" role="form">
-
+                            <form method="POST" id="signupform" class="form-horizontal" action = '' enctype="multipart/form-data">{%csrf_token%}
                                 {% for field in form %}
                                     <div class="form-group">
                                     {{ field.errors }}
@@ -40,10 +39,14 @@
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> Sign Up</button> 
+                                        <button id="btn-signup" type="submit" class="btn btn-info">Sign Up</button> 
                                     </div>
                                 </div>
                                                                 
                             </form>
                          </div>
                     </div>
+                   </div>
+                   </div>
+                   </body>
+                   </html>
