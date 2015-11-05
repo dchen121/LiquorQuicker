@@ -1,0 +1,112 @@
+{%load staticfiles%}
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+<link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
+
+  </head>
+  <body>
+      <nav >
+          {%block header%}
+          {%endblock header%}
+      </nav>
+
+    <div id="map" class = "container"></div>
+
+    <script type="text/javascript">
+
+var map;
+var delay = 0;
+var i = 0;
+var geocoder;
+var initLocations = {{ init_locations|safe }};
+var geocodeLocations = {{ geocode_locations|safe }};
+var attempts = 0;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 49.2561055, lng: -123.1939531},
+    zoom: 11
+  });
+  geocoder = new google.maps.Geocoder();
+  
+  plotLocations(initLocations);
+  if (geocodeLocations.length > 0) {
+    geocodeAndPlotLocations();
+  }
+  }
+
+// used code from http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
+function geocodeAddress(location, next) {
+  address = location.fields.address + ', ' + location.fields.city
+  storeName = location.fields.store_name
+  geocoder.geocode({ 'address': address, 'bounds': map.getBounds() }, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      attempts = 0;
+      delay = 0;
+      createMarker(storeName, address, results[0].geometry.location)
+    } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+      if (attempts < 1) {
+        i--;
+        attempts++;
+        delay = 1000;
+      } else {
+        attempts++;
+      }
+    } else {
+      console.log('Geocode not successful for the following reason: ' + status);
+    }
+    next();
+  });
+}
+
+function createMarker(storeName, address, latLng) {
+  var marker = new google.maps.Marker({
+    map: map,
+    position: latLng
+  });
+
+  marker.addListener('click', function() {
+    var contentString = "<strong>" + storeName + "</strong></br>" +
+                        "<p>" + address + "</p>";
+    var infowindow = new google.maps.InfoWindow ({
+      content: contentString
+    });
+    infowindow.open(map, marker);
+  });
+}
+
+function plotLocations(locations) {
+  for (var j = 0; j < locations.length; j++) {
+    loc = locations[j];
+    createMarker(loc.fields.store_name, loc.fields.address + ", " + loc.fields.city, {'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
+  }
+}
+
+function geocodeAndPlotLocations() {
+  if (i < geocodeLocations.length && attempts < 3) {
+    setTimeout(function() { 
+      geocodeAddress(geocodeLocations[i], geocodeAndPlotLocations)
+    }, delay);
+    i++;
+  }
+}
+
+
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY&callback=initMap">
+    </script>
+  </body>
+</html>
