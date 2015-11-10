@@ -1,0 +1,43 @@
+body{
+	padding: 50px 50px 50px 50px;
+	text-align: center;
+	background-position: center;
+	background-size: cover;
+	background: url(https://goo.gl/QW3qoy);
+}
+
+header {
+	display: block;
+	font-size: 200%;
+	color: white;
+	background: url(https://goo.gl/ByGExB);
+	background-size: cover;
+	background-position: center;
+	width: 100%;
+	text-align: center;
+	border-radius: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+
+.row1 {
+	padding-top: 20px;
+	padding-bottom:20px;
+	
+}
+
+.new-group {
+	font-size: 120%;
+	background-color: white;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+img {
+	width:150%;
+    height:150%;
+    max-width:100px;
+    max-height:100px;
+}
+

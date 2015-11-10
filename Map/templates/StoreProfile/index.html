@@ -1,0 +1,114 @@
+{%load staticfiles%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Your page title here :)</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/store.css'%}" />
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="{%static 'images/favicon.png'%}">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+ 
+
+
+
+<div class="container">
+  <div class="row-fluid">
+    <div class="col-xs-12">
+     <header> 
+    <h1>{{store.store_name}}</h1>
+    <p>{{store.address}} <br>
+    {{store.city}}
+    </p>
+  </header>
+
+
+  <div class="row-fluid">
+    <div class="col-xs-6">
+      <div class="new-group">
+        <div class="title"> Pricing </div>
+        <div class="data"> $10 </div> 
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="new-group">
+        <div class="title"> Rating </div>
+        <div class="data"> 5/10 </div> 
+      </div>
+    </div>
+
+  </div>
+  <div class="row-fluid"> 
+    <div class="col-xs-4">
+        <div class="thumbnail">                
+            <img src="http://vlamisliquor.com/wp-content/uploads/LIQUOR.png" class="img-responsive">
+        </div>
+    </div>
+
+    <div class="col-xs-4">
+        <div class="thumbnail">                
+            <img src="http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=53537287" class="img-responsive">              
+        </div>
+    </div>
+
+    <div class="col-xs-4">
+        <div class="thumbnail">                
+            <img src="http://hierbasusa.com/img/glass.png" class="img-responsive">
+            </div>                
+        </div>
+    </div>
+</div>
+</div>
+    </div>
+  </div>
+
+
+{%if user.is_authenticated%}
+  {{%review.as_p%}}
+{%endif}
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
