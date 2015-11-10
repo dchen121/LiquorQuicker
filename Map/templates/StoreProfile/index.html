@@ -1,4 +1,5 @@
 {%load staticfiles%}
+{%load comments%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,9 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Your page title here :)</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <title>LiquorQuicker</title>
+  <meta name="description" content="see your local liquor stores">
+  <meta name="author" content="AndYetItCompiles">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -102,11 +103,35 @@
     </div>
   </div>
 
+<h2>{{ store.name }}</h2>
+<h5>{{ store.review_set.count }} reviews ({{ store.average_rating | floatformat }} average rating)</h5>
 
-{%if user.is_authenticated%}
-  {{%review.as_p%}}
-{%endif}
+<h3>Recent reviews</h3>
 
+{% if store.review_set.all %}
+<div>
+    {% for review in store.review_set.all %}
+    <div>
+        <em>{{ review.comment }}</em>
+        <h6>Rated {{ review.rating }} of 5 by {{ review.user_name }}</h6>
+        <h5><a href="{% url 'map:review_detail' review.id %}">
+        Read more
+        </a></h5>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No reviews for this store yet</p>
+{% endif %}
+
+<h3> Add your review </h3>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{%url 'map:add_review' store.id%}" method="POST">
+{%csrf_token%}
+{{form.as_p}}
+<button type="submit"> Submit </button>
+</form>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'x!1k(-l0i4hdoh!!hr%j3w70s)r3lih%r8r*x@rj-$6)=%lw-y'
 
 ALLOWED_HOSTS = ['*']
-
+SITE_ID = 1;
 
 # Application definition
 
@@ -34,6 +34,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django_comments',
     'Map',
     'UserProfile',
 )
@@ -108,6 +110,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# Comment setting
+
 
 
 # Custom User class

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import LiquorLocation
+from .models import LiquorLocation, Review
 from .parser import Parser
 
 # Register your models here.
@@ -40,5 +40,11 @@ class LiquorLocationAdmin(admin.ModelAdmin):
         Parser()
     load_data.short_description = "Parse location data from csv and save it to the database"
 
-
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    list_display = ('store', 'rating', 'user_name', 'comment', 'pub_date')
+    list_filter = ['pub_date','user_name']
+    search_fields = ['comment']
+    
 admin.site.register(LiquorLocation, LiquorLocationAdmin)
+admin.site.register(Review, ReviewAdmin)
