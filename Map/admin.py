@@ -5,10 +5,10 @@ from .parser import Parser
 # Register your models here.
 class LiquorLocationAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['store_name', 'address', 'city']}),
+        (None, {'fields': ['name', 'address', 'city']}),
         ("Longitude/Latitude", {'fields': ['latitude', 'longitude'], 'classes': ['collapse']}),
     ]
-    list_display = ('store_name', 'address', 'city', 'latitude', 'longitude')
+    list_display = ('name', 'address', 'city', 'latitude', 'longitude')
     search_fields = ['store_name', 'address']
     actions = ['save_lat_long', 'load_data']
 

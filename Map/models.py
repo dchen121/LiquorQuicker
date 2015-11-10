@@ -1,17 +1,17 @@
 from django.db import models
-from googlemaps import Client, geocoding
+from googlemaps import Client
 from django.conf import settings
 
 
 class LiquorLocation(models.Model):
-    store_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return self.store_name
+        return self.name
 
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
