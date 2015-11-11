@@ -1,9 +1,9 @@
 from django.test import TestCase
-from .parser import LocationParser
-from .models import PrivateStore, BCLiquorStore, RuralAgencyStore
+from .parser import LocationParser, PriceParser
+from .models import PrivateStore, BCLiquorStore, RuralAgencyStore, Liquor
 
 
-class ParserTests(TestCase):
+class LocationParserTests(TestCase):
     def test_sufficient_data_method(self):
         data = {'name': '', 'address': '', 'city': ''}
         self.assertTrue(LocationParser.sufficient_data(data))
@@ -65,3 +65,12 @@ class ParserTests(TestCase):
         self.assertTrue(RuralAgencyStore.objects.get(name="Shuswap Lake Park Store"))
         self.assertTrue(RuralAgencyStore.objects.get(name="Baynes Lake General Store"))
         self.assertTrue(RuralAgencyStore.objects.get(name="Manning Park Resort"))
+
+
+class PriceParserTest(TestCase):
+    def test_if_data_is_retrieved(self):
+        PriceParser()
+
+        self.assertTrue(Liquor.objects.get(name='Cherry Point - Cowichan Blackberry', size=0.375))
+        self.assertTrue(Liquor.objects.get(name='Valtellina Sfursat - Aldo Rainoldi 09', size=0.75))
+        self.assertTrue(Liquor.objects.get(name='Mill St - Lager Organic', size=0.341))

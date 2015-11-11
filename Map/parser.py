@@ -4,12 +4,12 @@ from csv import DictReader
 from io import TextIOWrapper
 from urllib.request import urlopen
 
-from .models import BCLiquorStore, PrivateStore, RuralAgencyStore
+from .models import BCLiquorStore, PrivateStore, RuralAgencyStore, Liquor
 
 
 class Parser(metaclass=ABCMeta):
     formatting = {}
-    urls = [(None, (None, None)),]
+    urls = []
     naming = {}
     encoding = 'cp1252'
 
@@ -78,24 +78,30 @@ class Parser(metaclass=ABCMeta):
         :return: The correctly formatted string
         :rtype: str
         """
-        value = value.title()              # format text
+        value = value.title()  # format text
         value = re.sub(r'[\t\n\r ]+', ' ', value)  # remove extra whitespace
 
         if key in cls.formatting:
-            pattern = cls.formatting[key]['format_string']
-            index = cls.formatting[key]['index']
-            value = re.findall(pattern, value)
+            fmat = cls.formatting[key]
 
-            if value:
-                if index:
-                    return value[0][index]
+            if 'format_string' in fmat:
+                pattern = fmat['format_string']
+                value = re.findall(pattern, value)
+                if not value:
+                    return ''
+
+                if 'index' in fmat:
+                    index = fmat['index']
+                    value = value[0][index]
                 else:
-                    return value[0]
-            else:
-                return ''
+                    value = value[0]
 
-        else:
-            return value
+            if 'remove_chars' in fmat:
+                remove = fmat['remove_chars']
+                value = re.sub(remove, '', value)
+                value = re.sub(r'[\t\n\r ]+', ' ', value)
+
+        return value
 
     @classmethod
     @abstractmethod
@@ -156,13 +162,14 @@ class Parser(metaclass=ABCMeta):
 
 
 class LocationParser(Parser):
-    formatting = {'address': {'format_string': r'(Physical: )?([0-9]{3,5} ?- ?)?' +
+    formatting = {'address': {'format_string': r'(Physical: )?' +
+                                               r'([0-9]{3,5} ?- ?)?' +
                                                r'(#[0-9]{1,4} (& #[0-9]{1,4} )?)?' +
                                                r'([0-9]{3,5} [A-Za-z0-9\-.#& ]*)' +
                                                r'( Mailing:)?',
-                              'index': 4},
-                  'post_code': {'format_string': r'[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]',
-                                'index': None}}
+                              'index': 4,
+                              'remove_chars': r'[-]+'},
+                  'post_code': {'format_string': r'[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]'}}
     urls = [('http://goo.gl/7AI4ip', (RuralAgencyStore, None)),
             ('http://goo.gl/88yxeJ', (BCLiquorStore, None)),
             ('http://goo.gl/730MnE', (PrivateStore, 'private_store_filter'))]
@@ -189,12 +196,32 @@ class LocationParser(Parser):
         """
         Implements this abstract method in Parser. Uniqueness determined by
         address. If the data is non-unique, updates the name updates the name
-        of the store to the one stored in data.exit
+        of the store to the one stored in data.
         """
-        if model.objects.filter(address=data['address']).count() == 0:
+        test = model.objects.filter(address=data['address'])
+        if test.count() == 0:
             return True
         else:
-            store = model.objects.get(address=data['address'])
+            store = test[0]
             store.name = data['name']
             store.save()
+            return False
+
+
+class PriceParser(Parser):
+    naming = {'category': (['ITEM_CATEGORY_NAME'], 'optional'),
+              'name': (['PRODUCT_LONG_NAME'], 'required'),
+              'size': (['PRODUCT_LITRES_PER_CONTAINER'], 'required'),
+              'price': (['PRODUCT_PRICE'], 'required')}
+    urls = [('http://goo.gl/VQTMv7', (Liquor, None))]
+
+    @classmethod
+    def new_data(cls, data, model):
+        test = model.objects.filter(name=data['name'], size=data['size'])
+        if test.count() == 0:
+            return True
+        else:
+            liquor = test[0]
+            liquor.price = data['price']
+            liquor.save()
             return False
