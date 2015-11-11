@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_comments',
+    'bootstrap3',
     'Map',
     'UserProfile',
 )

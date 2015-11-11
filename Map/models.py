@@ -17,12 +17,24 @@ class LiquorLocation(models.Model):
     def getRatings(self):
         ratingList = []
         for review in self.review_set.all():
-            ratingList.append(review.rating)
+            if review.rating > 0:
+                ratingList.append(review.rating)
         return ratingList
 
     def average_rating(self):
         ratings = self.getRatings()
         return np.mean(ratings)
+
+    def getPrices(self):
+        pricingList = []
+        for review in self.review_set.all():
+            if review.price > -1:
+                pricingList.append(review.price)
+        return pricingList
+
+    def average_price(self):
+        prices = self.getPrices()
+        return np.mean(prices)
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
         gmaps = Client(key=settings.GMAPS_API_KEY)
@@ -47,15 +59,18 @@ class RuralAgencyStore(LiquorLocation):
 
 class Review(models.Model):
     RATING_CHOICES = (
+        (0,'N/A'),
         (1,'1'),
         (2,'2'),
         (3,'3'),
         (4,'4'),
         (5,'5'),
         )
+    price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default= -1)
     store = models.ForeignKey(LiquorLocation, null=True)
     pub_date = models.DateTimeField('date published', default = datetime.now, blank=True)
     user_name = models.CharField(max_length=100, default="baka")
-    comment = models.CharField(max_length=200, default = "No Comment")
-    rating = models.IntegerField(choices=RATING_CHOICES, default = 1)
+    comment = models.CharField(max_length=2000, default = "No Comment")
+    rating = models.IntegerField(choices=RATING_CHOICES, default = 0)
+
 
