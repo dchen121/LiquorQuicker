@@ -217,6 +217,11 @@ class PriceParser(Parser):
 
     @classmethod
     def new_data(cls, data, model):
+        """
+        Implements the new_data method from Parser. Uniqueness based on name
+        size of the liquor. If the liquor is in the DB then the price is
+        updated.
+        """
         test = model.objects.filter(name=data['name'], size=data['size'])
         if test.count() == 0:
             return True

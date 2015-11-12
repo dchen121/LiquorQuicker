@@ -68,6 +68,12 @@ class LocationParserTests(TestCase):
 
 
 class PriceParserTest(TestCase):
+    def test_new_data_method_unique(self):
+        pass
+
+    def test_new_data_method_not_unique(self):
+        pass
+
     def test_if_data_is_retrieved(self):
         PriceParser()
 
