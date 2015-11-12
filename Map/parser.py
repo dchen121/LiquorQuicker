@@ -4,7 +4,7 @@ from csv import DictReader
 from io import TextIOWrapper
 from urllib.request import urlopen
 
-from .models import BCLiquorStore, PrivateStore, RuralAgencyStore, Liquor
+from .models import BCLiquorStore, PrivateStore, RuralAgencyStore, BCLiquor
 
 
 class Parser(metaclass=ABCMeta):
@@ -22,6 +22,44 @@ class Parser(metaclass=ABCMeta):
         self.key = self.invert_naming()
         for url in self.urls:
             self.parse(*url)
+
+    @classmethod
+    def invert_naming(cls):
+        """
+        Inverts the naming dictionary so that each random csv term is a key
+        mapping it to the standardized key value.
+        :return: inverted dictionary
+        :rtype: dict
+        """
+        inverted = {}
+        for key, (names, req) in cls.naming.items():
+            for name in names:
+                inverted[name] = key
+
+        return inverted
+
+    def parse(self, url, model):
+        """
+        Parses a csv from the given url location and adds it to the given model
+        :param url: A url to the associated cvs file
+        :param model: A class from the models module
+        """
+        with urlopen(url) as content:
+            csv = TextIOWrapper(content, encoding=self.encoding)
+            data = DictReader(csv)
+
+            for row in data:
+                self.add_entry(row, *model)
+
+    def add_entry(self, entry, model, filter):
+        """
+        Adds an entry to the given model.
+        :param entry: a dictionary entry from the csv file
+        :param model: a model from the models module that entry is to be added
+        """
+        if filter is None or self.__class__.__dict__[filter](self, entry):
+            data = self.generate_data(entry)
+            self.add_to_model(data, model)
 
     def generate_data(self, entry):
         """
@@ -42,29 +80,6 @@ class Parser(metaclass=ABCMeta):
                     data[key] = value
 
         return data
-
-    def add_entry(self, entry, model, filter):
-        """
-        Adds an entry to the given model.
-        :param entry: a dictionary entry from the csv file
-        :param model: a model from the models module that entry is to be added
-        """
-        if filter is None or self.__class__.__dict__[filter](self, entry):
-            data = self.generate_data(entry)
-            self.add_to_model(data, model)
-
-    def parse(self, url, model):
-        """
-        Parses a csv from the given url location and adds it to the given model
-        :param url: A url to the associated cvs file
-        :param model: A class from the models module
-        """
-        with urlopen(url) as content:
-            csv = TextIOWrapper(content, encoding=self.encoding)
-            data = DictReader(csv)
-
-            for row in data:
-                self.add_entry(row, *model)
 
     @classmethod
     def clean_data(cls, value, key):
@@ -103,33 +118,19 @@ class Parser(metaclass=ABCMeta):
 
         return value
 
-    @classmethod
-    @abstractmethod
-    def new_data(cls, data, model):
+    def add_to_model(self, data, model):
         """
-        Determines if the data is unique. If so true is returned. If not
-        handles non-unique data and returns false.
-        :param data: The data to be added to the database
-        :param model: The model being used by django
-        :return: True or false if the data is new to the database
-        :rtype: bool
+        Adds all the data in data to a new instance of a model using the
+        standardized keys values in data.
+        :param data: a dictionary of data entries to be added to the model
+        :param model: the model to be used
         """
-        pass
+        if self.sufficient_data(data) and self.new_data(data, model):
+            instance = model()
+            for key in data.keys():
+                instance.__dict__[key] = data[key]
 
-    @classmethod
-    def invert_naming(cls):
-        """
-        Inverts the naming dictionary so that each random csv term is a key
-        mapping it to the standardized key value.
-        :return: inverted dictionary
-        :rtype: dict
-        """
-        inverted = {}
-        for key, (names, req) in cls.naming.items():
-            for name in names:
-                inverted[name] = key
-
-        return inverted
+            instance.save()
 
     @classmethod
     def sufficient_data(cls, data):
@@ -146,22 +147,28 @@ class Parser(metaclass=ABCMeta):
 
         return True
 
-    def add_to_model(self, data, model):
+    @classmethod
+    @abstractmethod
+    def new_data(cls, data, model):
         """
-        Adds all the data in data to a new instance of a model using the
-        standardized keys values in data.
-        :param data: a dictionary of data entries to be added to the model
-        :param model: the model to be used
+        Determines if the data is unique. If so true is returned. If not
+        handles non-unique data and returns false.
+        :param data: The data to be added to the database
+        :param model: The model being used by django
+        :return: True or false if the data is new to the database
+        :rtype: bool
         """
-        if self.sufficient_data(data) and self.new_data(data, model):
-            instance = model()
-            for key in data.keys():
-                instance.__dict__[key] = data[key]
-
-            instance.save()
+        pass
 
 
 class LocationParser(Parser):
+    naming = {'name': (['NAME', 'establishmentname', 'RAS Store Name'], 'required'),
+              'address': (['ADDRESS', 'address', 'Address'], 'required'),
+              'city': (['CITY', 'city', 'Town/City'], 'required'),
+              'post_code': (['POSTAL CODE', 'Postal code'], 'optional')}
+    urls = [('http://goo.gl/7AI4ip', (RuralAgencyStore, None)),
+            ('http://goo.gl/88yxeJ', (BCLiquorStore, None)),
+            ('http://goo.gl/730MnE', (PrivateStore, 'private_store_filter'))]
     formatting = {'address': {'format_string': r'(Physical: )?' +
                                                r'([0-9]{3,5} ?- ?)?' +
                                                r'(#[0-9]{1,4} (& #[0-9]{1,4} )?)?' +
@@ -170,13 +177,6 @@ class LocationParser(Parser):
                               'index': 4,
                               'remove_chars': r'[-]+'},
                   'post_code': {'format_string': r'[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]'}}
-    urls = [('http://goo.gl/7AI4ip', (RuralAgencyStore, None)),
-            ('http://goo.gl/88yxeJ', (BCLiquorStore, None)),
-            ('http://goo.gl/730MnE', (PrivateStore, 'private_store_filter'))]
-    naming = {'name': (['NAME', 'establishmentname', 'RAS Store Name'], 'required'),
-              'address': (['ADDRESS', 'address', 'Address'], 'required'),
-              'city': (['CITY', 'city', 'Town/City'], 'required'),
-              'post_code': (['POSTAL CODE', 'Postal code'], 'optional')}
 
     def private_store_filter(self, entry):
         """
@@ -213,7 +213,7 @@ class PriceParser(Parser):
               'name': (['PRODUCT_LONG_NAME'], 'required'),
               'size': (['PRODUCT_LITRES_PER_CONTAINER'], 'required'),
               'price': (['PRODUCT_PRICE'], 'required')}
-    urls = [('http://goo.gl/VQTMv7', (Liquor, None))]
+    urls = [('http://goo.gl/VQTMv7', (BCLiquor, None))]
 
     @classmethod
     def new_data(cls, data, model):

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .parser import LocationParser, PriceParser
-from .models import PrivateStore, BCLiquorStore, RuralAgencyStore, Liquor
+from .models import PrivateStore, BCLiquorStore, RuralAgencyStore, BCLiquor
 
 
 class LocationParserTests(TestCase):
@@ -71,6 +71,6 @@ class PriceParserTest(TestCase):
     def test_if_data_is_retrieved(self):
         PriceParser()
 
-        self.assertTrue(Liquor.objects.get(name='Cherry Point - Cowichan Blackberry', size=0.375))
-        self.assertTrue(Liquor.objects.get(name='Valtellina Sfursat - Aldo Rainoldi 09', size=0.75))
-        self.assertTrue(Liquor.objects.get(name='Mill St - Lager Organic', size=0.341))
+        self.assertTrue(BCLiquor.objects.get(name='Cherry Point - Cowichan Blackberry', size=0.375))
+        self.assertTrue(BCLiquor.objects.get(name='Valtellina Sfursat - Aldo Rainoldi 09', size=0.75))
+        self.assertTrue(BCLiquor.objects.get(name='Mill St - Lager Organic', size=0.341))
