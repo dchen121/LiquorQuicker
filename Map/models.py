@@ -4,6 +4,7 @@ from django.conf import settings
 from datetime import datetime
 import numpy as np
 
+
 class LiquorLocation(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
@@ -23,6 +24,7 @@ class LiquorLocation(models.Model):
     def average_rating(self):
         ratings = self.getRatings()
         return np.mean(ratings)
+
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
         gmaps = Client(key=settings.GMAPS_API_KEY)
@@ -30,7 +32,6 @@ class LiquorLocation(models.Model):
         if results:
             lat_lng = results[0]['geometry']['location']
             return lat_lng
-    
 
 
 class PrivateStore(LiquorLocation):
@@ -47,15 +48,33 @@ class RuralAgencyStore(LiquorLocation):
 
 class Review(models.Model):
     RATING_CHOICES = (
-        (1,'1'),
-        (2,'2'),
-        (3,'3'),
-        (4,'4'),
-        (5,'5'),
-        )
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
     store = models.ForeignKey(LiquorLocation, null=True)
-    pub_date = models.DateTimeField('date published', default = datetime.now, blank=True)
+    pub_date = models.DateTimeField('date published', default=datetime.now, blank=True)
     user_name = models.CharField(max_length=100, default="baka")
-    comment = models.CharField(max_length=200, default = "No Comment")
-    rating = models.IntegerField(choices=RATING_CHOICES, default = 1)
+    comment = models.CharField(max_length=200, default="No Comment")
+    rating = models.IntegerField(choices=RATING_CHOICES, default=1)
 
+
+class Liquor(models.Model):
+    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
+    size = models.DecimalField(max_digits=5, decimal_places=3)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+
+
+class BCLiquor(Liquor):
+    pass
+
+
+class PrivateLiquor(Liquor):
+    store = models.ForeignKey(PrivateStore)
+
+
+class RASLiquor(Liquor):
+    store = models.ForeignKey(RuralAgencyStore)
