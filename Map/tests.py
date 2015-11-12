@@ -69,10 +69,26 @@ class LocationParserTests(TestCase):
 
 class PriceParserTest(TestCase):
     def test_new_data_method_unique(self):
-        pass
+        liquor = BCLiquor(category='Test Category', name='Test Name', size=0.375, price=3.50)
+        liquor.save()
+
+        data = {'category':'Test Category', 'name':'New Name', 'size':0.750, 'price':3.50}
+        self.assertTrue(PriceParser.new_data(data, BCLiquor))
+
+        data = {'category':'Test Category', 'name':'Test Name', 'size':0.750, 'price':3.50}
+        self.assertTrue(PriceParser.new_data(data, BCLiquor))
+
+        data = {'category':'Test Category', 'name':'New Name', 'size':0.375, 'price':3.50}
+        self.assertTrue(PriceParser.new_data(data, BCLiquor))
 
     def test_new_data_method_not_unique(self):
-        pass
+        liquor = BCLiquor(category='Test Category', name='Test Name', size=0.375, price=3.50)
+        liquor.save()
+        data = {'category':'Test Category', 'name':'Test Name', 'size':0.375, 'price':2.50}
+
+        self.assertFalse(PriceParser.new_data(data, BCLiquor))
+        liquor = BCLiquor.objects.get(name='Test Name', size=0.375)
+        self.assertEqual(liquor.price, 2.50)
 
     def test_if_data_is_retrieved(self):
         PriceParser()
