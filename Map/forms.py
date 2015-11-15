@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, NumberInput
 from .models import Review
 
 class ReviewForm(ModelForm):
@@ -6,5 +6,7 @@ class ReviewForm(ModelForm):
         model = Review
         fields = ['rating','price', 'comment']
         widgets = {
-            'comment': Textarea(attrs={'cols': 50, 'rows': 5})
+            'comment': Textarea(attrs={'cols': 20, 'rows': 10}),
+            'price': NumberInput(attrs={'min': '-1', 'max': '105', 'step': '1',
+            	})
         }

@@ -4,18 +4,14 @@ body{
 	text-align: center;
 	background-position: center;
 	background-size: cover;
-	background: url(https://goo.gl/QW3qoy);
+	background: url(http://7-themes.com/data_images/out/67/6999936-cool-websites-background.jpg);
+	color: white;
 }
 
-.used-space {
-	padding: 10px 5px;
-	background-color:white;
-}
 
 header {
 	display: block;
 	font-size: 200%;
-	color: white;
 	text-align: center;
 
 }
@@ -24,17 +20,29 @@ header {
 .row1 {
 	font-size: 150%;
 	padding-bottom:50px;
-	color: white;
+}
+
+.title{
+	text-align: left;
+}
+
+.data {
+	text-align:center;
 }
 
 .new-group {
 	padding-bottom: 20px;
+	overflow: scroll;
+
 }
 
 .review {
 	padding: 0 30px;
 	padding-bottom: 50px;
 	text-align: justify;
+}
+
+.review-form {
+	text-align: left;
 	color: black;
-	
 }

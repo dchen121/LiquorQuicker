@@ -70,7 +70,10 @@ class Review(models.Model):
     store = models.ForeignKey(LiquorLocation, null=True)
     pub_date = models.DateTimeField('date published', default = datetime.now, blank=True)
     user_name = models.CharField(max_length=100, default="baka")
-    comment = models.CharField(max_length=2000, default = "No Comment")
+    comment = models.CharField(max_length=200, default = "")
     rating = models.IntegerField(choices=RATING_CHOICES, default = 0)
+
+    class Meta:
+        ordering = ['pub_date']
 
 
