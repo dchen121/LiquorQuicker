@@ -30,12 +30,14 @@ def add_review(request, pk):
     form = ReviewForm(request.POST)
     if form.is_valid():
         rating = form.cleaned_data['rating']
+        price = form.cleaned_data['price']
         comment = form.cleaned_data['comment']
         user_name = request.user.username
         review = Review()
         review.store = store
         review.user_name = user_name
         review.rating = rating
+        review.price = price
         review.comment = comment
         review.pub_date = datetime.now()
         review.save()

@@ -6,6 +6,7 @@ body{
 	background-size: cover;
 	background: url(http://7-themes.com/data_images/out/67/6999936-cool-websites-background.jpg);
 	color: white;
+	font-family: 'Raleway', sans-serif;
 }
 
 
@@ -30,11 +31,6 @@ header {
 	text-align:center;
 }
 
-.new-group {
-	padding-bottom: 20px;
-	overflow: scroll;
-
-}
 
 .review {
 	padding: 0 30px;
@@ -45,4 +41,8 @@ header {
 .review-form {
 	text-align: left;
 	color: black;
+}
+
+.control-label {
+	color: white;
 }

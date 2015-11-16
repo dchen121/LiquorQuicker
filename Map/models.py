@@ -34,7 +34,9 @@ class LiquorLocation(models.Model):
 
     def average_price(self):
         prices = self.getPrices()
+        print(prices)
         return np.mean(prices)
+
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
         gmaps = Client(key=settings.GMAPS_API_KEY)
