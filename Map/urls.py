@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^store/(?P<pk>[0-9]+)/add_review/$', views.add_review, name='add_review'),
     url(r'^load_locations/$', views.load_locations, name="load_locations"),
     url(r'^filter/(?P<city>.+)/$', views.filter_by_city, name="filter"),
+    url(r'^favourite_store/$', views.favourite_store, name="favourite_store"),
 ]

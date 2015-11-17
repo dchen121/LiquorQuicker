@@ -2,6 +2,7 @@
 {%load bootstrap3%}
 
 
+
 {%block navbar%}
 <li><a href = "{% url 'profile:profile' %}"> My Profile </a></li>
 <li><a href = "{% url 'profile:logout' %}"> Logout </a></li>
@@ -10,7 +11,9 @@
 
 
 {%block favourite%}
-<button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Favourite</button>
+<button type="button" id="favourite-btn" data-storeid = {{ store.id }} data-userid = {{ user.id }} class="btn btn-sm btn-primary"
+{% if user.favorite_store.id == store.id %} disabled="disabled" {% endif %}>
+<span class="glyphicon glyphicon-thumbs-up"></span> Favourite</button>
 {%endblock favourite%}
 
 

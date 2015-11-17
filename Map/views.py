@@ -2,10 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect, HttpResponse
 from Map.models import LiquorLocation, Review
+from UserProfile.models import LQUser
 from django.core import serializers
 from .forms import ReviewForm
 from datetime import datetime
 from django.core.urlresolvers import reverse
+
 
 class MapView(TemplateView):
     """
@@ -25,7 +27,7 @@ def store_profile(request, pk):
     # most_recent = LiquorLocation.review_set.order_by('pub_date')
 
     if request.user.is_authenticated():
-        return render(request,'StoreProfile/authenticated_user.html',{'store':store,'form':ReviewForm()})
+        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'user': request.user, 'form':ReviewForm()})
     else:
         return render(request,'StoreProfile/anonymous_user.html',{'store':store,'form':ReviewForm()})
 
@@ -75,3 +77,18 @@ def filter_by_city(request, city):
     filtered_stores = LiquorLocation.objects.filter(city__iexact=city)
     context = {'city' : city, 'filtered_stores' : filtered_stores}
     return render(request, 'Map/filter_by_city.html', context)
+
+def favourite_store(request):
+    if request.method == "GET":
+        user_id = request.GET['user']
+        store_id = request.GET['store']
+
+        user = get_object_or_404(LQUser, pk=user_id)
+        user.favorite_store = get_object_or_404(LiquorLocation, pk=store_id)
+        user.save()
+
+    check = get_object_or_404(LQUser, pk=user_id)  
+    return HttpResponse(check.favorite_store is not None)
+        
+
+
