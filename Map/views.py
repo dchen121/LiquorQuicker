@@ -17,6 +17,7 @@ class MapView(TemplateView):
         context = super(MapView, self).get_context_data(**kwargs)
         context['geocode_locations'] = serializers.serialize("json", LiquorLocation.objects.filter(latitude__isnull=True))
         context['init_locations'] = serializers.serialize("json", LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True))
+        context['locations'] = serializers.serialize("json", LiquorLocation.objects.exclude(city__isnull=True))
         return context
 
 def store_profile(request, pk):
@@ -65,3 +66,8 @@ def load_locations(request):
             raise Http404("No locations found in this area.")
         else:
             return HttpResponse(serializers.serialize("json", locations), content_type='application/json')
+
+def filter_by_city(request, city):
+    filtered_stores = LiquorLocation.objects.filter(city__iexact=city)
+    context = {'city' : city, 'filtered_stores' : filtered_stores}
+    return render(request, 'Map/filter_by_city.html', context)
