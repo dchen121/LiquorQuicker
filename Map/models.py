@@ -1,18 +1,19 @@
 from django.db import models
-from googlemaps import Client, geocoding
+from googlemaps import Client
 from django.conf import settings
 from datetime import datetime
 import numpy as np
 
+
 class LiquorLocation(models.Model):
-    store_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return self.store_name
+        return self.name
 
     def getRatings(self):
         ratingList = []
@@ -24,6 +25,7 @@ class LiquorLocation(models.Model):
     def average_rating(self):
         ratings = self.getRatings()
         return np.mean(ratings)
+
 
     def getPrices(self):
         pricingList = []
@@ -37,6 +39,7 @@ class LiquorLocation(models.Model):
         print(prices)
         return np.mean(prices)
 
+
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
         gmaps = Client(key=settings.GMAPS_API_KEY)
@@ -44,7 +47,6 @@ class LiquorLocation(models.Model):
         if results:
             lat_lng = results[0]['geometry']['location']
             return lat_lng
-    
 
 
 class PrivateStore(LiquorLocation):
@@ -61,6 +63,7 @@ class RuralAgencyStore(LiquorLocation):
 
 class Review(models.Model):
     RATING_CHOICES = (
+
         (0,'N/A'),
         (1,'1'),
         (2,'2'),
@@ -69,9 +72,12 @@ class Review(models.Model):
         (5,'5'),
         )
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default= -1)
+
+
     store = models.ForeignKey(LiquorLocation, null=True)
-    pub_date = models.DateTimeField('date published', default = datetime.now, blank=True)
+    pub_date = models.DateTimeField('date published', default=datetime.now, blank=True)
     user_name = models.CharField(max_length=100, default="baka")
+
     comment = models.CharField(max_length=200, default = "")
     rating = models.IntegerField(choices=RATING_CHOICES, default = 0)
 
@@ -79,3 +85,22 @@ class Review(models.Model):
         ordering = ['pub_date']
 
 
+
+class Liquor(models.Model):
+    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
+    size = models.DecimalField(max_digits=5, decimal_places=3)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+
+
+class BCLiquor(Liquor):
+    pass
+
+
+class PrivateLiquor(Liquor):
+    store = models.ForeignKey(PrivateStore)
+
+
+
+class RASLiquor(Liquor):
+    store = models.ForeignKey(RuralAgencyStore)
