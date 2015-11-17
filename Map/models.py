@@ -36,7 +36,6 @@ class LiquorLocation(models.Model):
 
     def average_price(self):
         prices = self.getPrices()
-        print(prices)
         return np.mean(prices)
 
 

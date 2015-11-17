@@ -22,7 +22,11 @@ class MapView(TemplateView):
 def store_profile(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)
     # most_recent = LiquorLocation.review_set.order_by('pub_date')
-    return render(request,'StoreProfile/index.html',{'store':store,'form':ReviewForm()})
+
+    if request.user.is_authenticated():
+        return render(request,'StoreProfile/authenticated_user.html',{'store':store,'form':ReviewForm()})
+    else:
+        return render(request,'StoreProfile/anonymous_user.html',{'store':store,'form':ReviewForm()})
 
 
 def add_review(request, pk):

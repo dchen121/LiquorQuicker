@@ -1,0 +1,39 @@
+{% extends 'StoreProfile/index.html' %}
+{%load bootstrap3%}
+
+{%block navbar%}
+<li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
+<li><a href = "{% url 'profile:signup' %}"> Register</a></li>
+{% endblock navbar%}
+
+
+
+{%block favourite%}
+<button type="button" class="btn btn-sm btn-primary" disabled="disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Favourite</button>
+{%endblock favourite%}
+
+
+
+{%block review_form%}
+<form action="{%url 'map:add_review' store.id%}" method="POST" class="form" role="form">{%csrf_token%}
+  <fieldset disabled>
+    <div class="form-group">
+      <label class="control-label">{{form.rating.label}}</label>
+      <div class="">{{form.rating}}</div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">{{form.price.label}}</label>
+      <div class="">{{form.price}}</div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">{{form.comment.label}}</label>
+      <div class="">          
+        <input type="text" id="disabledTextInput" class="form-control" placeholder="Login to ">
+      </div>
+    </div>
+  <button type="submit" class="btn btn-primary">
+  {% bootstrap_icon "star" %} Add Review
+  </button>
+  </fieldset>
+</form>
+{%endblock review_form%}
