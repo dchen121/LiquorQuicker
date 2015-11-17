@@ -17,6 +17,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th>Store ID</th>
           <th>Store Name</th>
           <th>Address</th>
           <th>City</th>
@@ -25,7 +26,8 @@
       <tbody>
         {% for store in filtered_stores %}
         <tr>
-          <td><a href="{% url 'map:map' %}">{{store.name}}</a></td>
+          <td>{{store.id}}</td>
+          <td><a href="/store/{{store.id}}">{{store.name}}</a></td>
           <td>{{store.address}}</td>
           <td>{{store.city}}</td>
         </tr>
