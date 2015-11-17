@@ -9,7 +9,7 @@ class LiquorLocationAdmin(admin.ModelAdmin):
         ("Longitude/Latitude", {'fields': ['latitude', 'longitude'], 'classes': ['collapse']}),
     ]
     list_display = ('name', 'address', 'city', 'latitude', 'longitude')
-    search_fields = ['store_name', 'address']
+    search_fields = ['name', 'address']
     actions = ['save_lat_long', 'load_data']
 
     def save_lat_long(self, request, queryset):
@@ -25,7 +25,7 @@ class LiquorLocationAdmin(admin.ModelAdmin):
                 count_success = count_success + 1
             else:
                 count_failure = count_failure + 1
-                failure_string = failure_string + location.store_name + " (" + \
+                failure_string = failure_string + location.name + " (" + \
                                 location.address + ", " + location.city + "), "
         if count_failure == 0:
             self.message_user(request, "%d locations were successfully updated." % count_success)

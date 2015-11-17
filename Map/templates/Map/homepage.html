@@ -17,6 +17,56 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+
+<script type="text/javascript">
+        var locations = {{ locations|safe }};
+
+        window.onload = function addCities() {
+          cities = [];
+          for (var j = 0; j < locations.length; j++) {
+            loc = locations[j];
+            if (!contains(cities, loc.fields.city)) {
+              cities.push(loc.fields.city);
+            }
+          }
+          cities.sort();
+
+          var dropdown_menu = document.getElementById('DropdownCities');
+
+          for (var i = 0; i < cities.length; i++) {
+            city = cities[i];
+            var newLi = document.createElement('li');
+            
+            var newA = document.createElement('a');
+            newA.style.textAlign = "center";
+            newA.setAttribute("href", "filter/" + city);
+            newA.innerHTML = city + "<br>";
+
+            newLi.appendChild(newA);
+            dropdown_menu.appendChild(newLi); // append <li><a href=('filter/' + city) align='center'> city </a></li><br> to dropdown_menu
+          }
+        }
+
+        function contains(list, item) {
+          for (var i = 0; i < list.length; i++) {
+            if (item === list[i]) {
+              return true;
+            }
+          }
+          return false;
+        }
+        </script>
+
+        <li class="dropdown">
+          <style type='text/css'>ul.nav li.dropdown:hover ul.dropdown-menu {display: block;}</style>
+          <a>Filter by City <span class="caret"></span></a>
+          <ul class="dropdown-menu scrollable-menu" role="menu" id="DropdownCities">
+            <div id="cityList">
+              <p align="center">Select a city</p>
+            </div>
+          </ul>
+        </li>
+
 			{%if user.is_authenticated%}
 			<li><a href = "{% url 'profile:profile' %}"> My Profile </a>
           	</li>
