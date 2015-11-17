@@ -20,6 +20,4 @@ urlpatterns = [
     url(r'^', include('Map.urls', namespace='map')),
     url(r'^profile/', include('UserProfile.urls', namespace='profile')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^comments/', include('django_comments.urls')),
-    
 ]
