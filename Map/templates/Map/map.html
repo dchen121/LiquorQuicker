@@ -4,6 +4,8 @@
 <html>
   <head>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
   <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
@@ -17,94 +19,104 @@
 
   </head>
   <body>
-      <nav >
+      <nav>
           {%block header%}
           {%endblock header%}
       </nav>
 
     <div id="map" class = "container"></div>
 
-    <script type="text/javascript">
+     <script src="{% static 'js/google_map.js' %}"></script>
+     // <script src="{% static 'js/search.js' %}"></script>
+//     <script type="text/javascript">
+//     var map;
+// var delay = 0;
+// var i = 0;
+// var geocoder;
+// var initLocations = {{ init_locations|safe }};
+// var geocodeLocations = {{ geocode_locations|safe }};
+// var attempts = 0;
 
-var map;
-var delay = 0;
-var i = 0;
-var geocoder;
-var initLocations = {{ init_locations|safe }};
-var geocodeLocations = {{ geocode_locations|safe }};
-var attempts = 0;
+// function initMap() {
+//   map = new google.maps.Map(document.getElementById('map'), {
+//     center: {lat: 49.2561055, lng: -123.1939531},
+//     zoom: 11
+//   });
+//   geocoder = new google.maps.Geocoder();
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 49.2561055, lng: -123.1939531},
-    zoom: 11
-  });
-  geocoder = new google.maps.Geocoder();
+//   map.addListener('idle', function() {
+//   bounds = map.getBounds();
+//   top = bounds.getNorthEast().lat();
+//   bottom = bounds.getSouthWest().lat();
+//   right = bounds.getNorthEast().lng();
+//   left = bounds.getSouthWest().lng();
+//   $.get('/load_locations/', { top: top, bottom: bottom, right: right , left: left}, function(locations) {
+//       plotLocations(locations);
+//     });
+//   });
   
-  plotLocations(initLocations);
-  if (geocodeLocations.length > 0) {
-    geocodeAndPlotLocations();
-  }
-  }
+//   // plotLocations(initLocations);
+//   // if (geocodeLocations.length > 0) {
+//   //   geocodeAndPlotLocations();
+//   // }
+//   }
 
-// used code from http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
-function geocodeAddress(location, next) {
-  address = location.fields.address + ', ' + location.fields.city
-  storeName = location.fields.store_name
-  geocoder.geocode({ 'address': address, 'bounds': map.getBounds() }, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      attempts = 0;
-      delay = 0;
-      createMarker(storeName, address, results[0].geometry.location)
-    } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-      if (attempts < 1) {
-        i--;
-        attempts++;
-        delay = 1000;
-      } else {
-        attempts++;
-      }
-    } else {
-      console.log('Geocode not successful for the following reason: ' + status);
-    }
-    next();
-  });
-}
+// // used code from http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
+// function geocodeAddress(location, next) {
+//   address = location.fields.address + ', ' + location.fields.city
+//   storeName = location.fields.store_name
+//   geocoder.geocode({ 'address': address, 'bounds': map.getBounds() }, function(results, status) {
+//     if (status == google.maps.GeocoderStatus.OK) {
+//       attempts = 0;
+//       delay = 0;
+//       createMarker(storeName, address, results[0].geometry.location)
+//     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+//       if (attempts < 1) {
+//         i--;
+//         attempts++;
+//         delay = 1000;
+//       } else {
+//         attempts++;
+//       }
+//     } else {
+//       console.log('Geocode not successful for the following reason: ' + status);
+//     }
+//     next();
+//   });
+// }
 
-function createMarker(storeName, address, latLng) {
-  var marker = new google.maps.Marker({
-    map: map,
-    position: latLng
-  });
+// function createMarker(storeName, address, latLng) {
+//   var marker = new google.maps.Marker({
+//     map: map,
+//     position: latLng
+//   });
 
-  marker.addListener('click', function() {
-    var contentString = "<strong>" + storeName + "</strong></br>" +
-                        "<p>" + address + "</p>";
-    var infowindow = new google.maps.InfoWindow ({
-      content: contentString
-    });
-    infowindow.open(map, marker);
-  });
-}
+//   marker.addListener('click', function() {
+//     var contentString = "<strong>" + storeName + "</strong></br>" +
+//                         "<p>" + address + "</p>";
+//     var infowindow = new google.maps.InfoWindow ({
+//       content: contentString
+//     });
+//     infowindow.open(map, marker);
+//   });
+// }
 
-function plotLocations(locations) {
-  for (var j = 0; j < locations.length; j++) {
-    loc = locations[j];
-    createMarker(loc.fields.store_name, loc.fields.address + ", " + loc.fields.city, {'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
-  }
-}
+// function plotLocations(locations) {
+//   for (var j = 0; j < locations.length; j++) {
+//     loc = locations[j];
+//     createMarker(loc.fields.store_name, loc.fields.address + ", " + loc.fields.city, {'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
+//   }
+// }
 
-function geocodeAndPlotLocations() {
-  if (i < geocodeLocations.length && attempts < 3) {
-    setTimeout(function() { 
-      geocodeAddress(geocodeLocations[i], geocodeAndPlotLocations)
-    }, delay);
-    i++;
-  }
-}
-
-
-    </script>
+// function geocodeAndPlotLocations() {
+//   if (i < geocodeLocations.length && attempts < 3) {
+//     setTimeout(function() { 
+//       geocodeAddress(geocodeLocations[i], geocodeAndPlotLocations)
+//     }, delay);
+//     i++;
+//   }
+// }
+// </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY&callback=initMap">
     </script>

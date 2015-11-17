@@ -37,7 +37,7 @@ class LiquorLocationAdmin(admin.ModelAdmin):
     save_lat_long.short_description = "Update location with latitude and longitude"
 
     def load_data(self, request, queryset):
-        Parser()
+        LocationParser()
     load_data.short_description = "Parse location data from csv and save it to the database"
 
 class ReviewAdmin(admin.ModelAdmin):

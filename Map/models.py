@@ -22,11 +22,6 @@ class LiquorLocation(models.Model):
                 ratingList.append(review.rating)
         return ratingList
 
-    def average_rating(self):
-        ratings = self.getRatings()
-        return np.mean(ratings)
-
-
     def getPrices(self):
         pricingList = []
         for review in self.review_set.all():
@@ -39,11 +34,10 @@ class LiquorLocation(models.Model):
         print(prices)
         return np.mean(prices)
 
-
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
         gmaps = Client(key=settings.GMAPS_API_KEY)
-        results = gmaps.geocode(self.address + ", " + self.city)
+        results = gmaps.geocode(address=self.address + ", " + self.city, region="CA")
         if results:
             lat_lng = results[0]['geometry']['location']
             return lat_lng
@@ -72,7 +66,6 @@ class Review(models.Model):
         (5,'5'),
         )
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, default= -1)
-
 
     store = models.ForeignKey(LiquorLocation, null=True)
     pub_date = models.DateTimeField('date published', default=datetime.now, blank=True)

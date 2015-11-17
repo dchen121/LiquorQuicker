@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from Map.models import LiquorLocation, Review
 from django.core import serializers
 from .forms import ReviewForm
@@ -24,7 +24,6 @@ def store_profile(request, pk):
     # most_recent = LiquorLocation.review_set.order_by('pub_date')
     return render(request,'StoreProfile/index.html',{'store':store,'form':ReviewForm()})
 
-
 def add_review(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)
     form = ReviewForm(request.POST)
@@ -44,4 +43,25 @@ def add_review(request, pk):
         return redirect('map:store',pk)
     return render(request, 'StoreProfile/index.html', {'store': store, 'form': form})
 
+def load_locations(request):
+    top = None
+    bottom = None
+    right = None
+    left = None
+    
+    if request.method == "GET":
+        top = request.GET['top']
+        bottom = request.GET['bottom']
+        right = request.GET['right']
+        left = request.GET['left']
 
+        locations = LiquorLocation.objects.filter(
+            latitude__gt=bottom
+            ).filter(latitude__lt=top).filter(
+            longitude__gt=left
+            ).filter(longitude__lt=right)
+
+        if locations.count() < 1:
+            raise Http404("No locations found in this area.")
+        else:
+            return HttpResponse(serializers.serialize("json", locations), content_type='application/json')
