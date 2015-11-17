@@ -15,7 +15,7 @@ function initMap() {
     map_bottom = bounds.getSouthWest().lat();
     map_right = bounds.getNorthEast().lng();
     map_left = bounds.getSouthWest().lng();
-    $.getJSON('/load_locations', { 
+    var jqxhr = $.getJSON('/load_locations', { 
       top: map_top, 
       bottom: map_bottom, 
       right: map_right , 
