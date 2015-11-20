@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^load_locations/$', views.load_locations, name="load_locations"),
     url(r'^filter/(?P<city>.+)/$', views.filter_by_city, name="filter"),
     url(r'^favourite_store/$', views.favourite_store, name="favourite_store"),
+    url(r'^closest_points/$', views.closest_points, name="closest_points"),
 ]

@@ -1,12 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from Map.models import LiquorLocation, Review
 from UserProfile.models import LQUser
 from django.core import serializers
 from .forms import ReviewForm
 from datetime import datetime
 from django.core.urlresolvers import reverse
+from . import utils
 
 
 class MapView(TemplateView):
@@ -89,6 +90,19 @@ def favourite_store(request):
 
     check = get_object_or_404(LQUser, pk=user_id)  
     return HttpResponse(check.favorite_store is not None)
+
+def closest_points(request):
+    if request.method == "GET":
+        lat = float(request.GET['lat'])
+        lng = float(request.GET['lng'])
+        all_locations = LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True).values_list('id', 'latitude', 'longitude')
+        point = utils.get_closest_points(lat, lng, all_locations)
+        locations = get_list_or_404(LiquorLocation, pk=point)
+
+        return HttpResponse(serializers.serialize("json", locations), content_type='application/json')
+
+
+
         
 
 
