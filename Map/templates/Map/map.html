@@ -15,6 +15,9 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
+<script src="{% static 'js/google_map.js' %}"></script>
+<script src="{% static 'js/search.js' %}"></script>
+
 <link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
 <link rel= "stylesheet" type = "text/css" href = "{% static 'css/homepage.css'%}">
 
@@ -27,8 +30,6 @@
 
     <div id="map" class = "container"></div>
 
-     <script src="{% static 'js/google_map.js' %}"></script>
-     <script src="{% static 'js/search.js' %}"></script>
 
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY&callback=initMap">

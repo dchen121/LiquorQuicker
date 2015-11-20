@@ -1,6 +1,7 @@
 var map;
 var geocoder;
 var markers = [];
+var currentLocation = null;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -37,14 +38,16 @@ function clearMarkers() {
 function createMarker(storeName, address, latLng) {
   var marker = new google.maps.Marker({
     map: map,
-    position: latLng
+    position: latLng,
+    zIndex: 10
   });
 
   marker.addListener('click', function() {
     var contentString = "<strong>" + storeName + "</strong></br>" +
                         "<p>" + address + "</p>";
     var infowindow = new google.maps.InfoWindow ({
-      content: contentString
+      content: contentString,
+      disableAutoPan: true
     });
     infowindow.open(map, marker);
   });
