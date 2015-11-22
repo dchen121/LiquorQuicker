@@ -1,24 +1,21 @@
 {% extends "Map/map.html" %}
 
-
-
-
 {%block header%}
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'map:map' %}">Liquor Quicker</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'map:map' %}">Liquor Quicker</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
 
-<script type="text/javascript">
+        <script type="text/javascript">
         var locations = {{ locations|safe }};
 
         window.onload = function addCities() {
@@ -39,7 +36,7 @@
             
             var newA = document.createElement('a');
             newA.style.textAlign = "center";
-            newA.setAttribute("href", "filter/" + city);
+            newA.setAttribute("href", "/filter/" + city);
             newA.innerHTML = city + "<br>";
 
             newLi.appendChild(newA);
@@ -67,18 +64,15 @@
           </ul>
         </li>
 
-			{%if user.is_authenticated%}
-			<li><a href = "{% url 'profile:profile' %}"> My Profile </a>
-          	</li>
-          	<li>
-          	<a href = "{% url 'profile:logout' %}"> Logout </a>
-          	</li>
-          	{%else %}
-            <li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
-            <li><a href = "{% url 'profile:signup' %}"> Register</a></li>
-       		{%endif%}
-          </ul>
-        </div>
-      </div>
-    </nav>
+        {%if user.is_authenticated%}
+        <li><a href = "{% url 'profile:profile' %}"> My Profile </a></li>
+        <li><a href = "{% url 'profile:logout' %}"> Logout </a></li>
+       {%else %}
+       <li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
+       <li><a href = "{% url 'profile:signup' %}"> Register</a></li>
+       {%endif%}
+     </ul>
+   </div>
+ </div>
+</nav>
 {%endblock header%}

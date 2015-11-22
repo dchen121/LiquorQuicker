@@ -28,11 +28,12 @@ def store_profile(request, pk):
     # most_recent = LiquorLocation.review_set.order_by('pub_date')
 
     ratings = LiquorLocation.getRatings(store);
+    locations = serializers.serialize("json", LiquorLocation.objects.exclude(city__isnull=True))
 
     if request.user.is_authenticated():
-        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'ratings':ratings, 'user': request.user, 'form':ReviewForm()})
+        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'user': request.user, 'form':ReviewForm()})
     else:
-        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'ratings':ratings, 'form':ReviewForm()})
+        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'form':ReviewForm()})
 
 def add_review(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)

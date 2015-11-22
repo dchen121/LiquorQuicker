@@ -19,7 +19,8 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+
+  <nav class="navbar navbar-inverse navbar-fixed-top" style="position:relative">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -54,7 +55,7 @@
             
             var newA = document.createElement('a');
             newA.style.textAlign = "center";
-            newA.setAttribute("href", "filter/" + city);
+            newA.setAttribute("href", '/filter/' + city);
             newA.innerHTML = city + "<br>";
 
             newLi.appendChild(newA);
