@@ -28,7 +28,23 @@
           {%endblock header%}
       </nav>
 
-    <div id="map" class = "container"></div>
+      <div class ="container-fluid content-container">
+        <div class="row map-container">
+          <div id="list-pane" class="col-md-4">
+            <div class="row search-container">
+              <form id="search-bar" class="search-box">
+                <input id="search-bar-input" type="text" class="form-control" placeholder="Search..."/>
+              </form>
+            </div>
+            <div class="row results-container">
+              <ul class="results-list">
+              </ul>
+            </div>
+
+          </div>
+          <div id="map" class="col-md-8"></div>
+        </div>
+      </div>
 
 
     <script async defer

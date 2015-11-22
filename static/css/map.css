@@ -8,10 +8,49 @@ html, body { height: 100%;
   -o-background-size: cover;
   -webkit-background-size: cover;}
       
-      #map { height: 70%; 
-      		padding: auto;
-      		margin: auto;
-			top:100px;}
+.content-container {
+  position: relative;
+  height: calc(100% - 50px);
+  top: 50px;
+} 
 
+.map-container {
+  height: 100%;
+}
 
+#map { height: 90%; 
+	padding: auto;
+  margin-top: 50px;
+}
+
+#list-pane {
+  background-color: #191919;
+  height: 100%;
+}
+
+#search-bar-input {
+  width: 98%;
+  margin: 1%;
+}
+
+.results-container {
+  height: calc(100% - 45px) ;
+  overflow-y: auto;
+}
+
+.results-list {
+  margin-top: 10px;
+  padding-left: 0px;
+  list-style-type: none;
+}
+
+.result {
+  padding: 10px 5%;
+  background-color: white;
+  margin: 5px;
+}
+
+.result.active {
+  background-color: lightblue;
+}
       
