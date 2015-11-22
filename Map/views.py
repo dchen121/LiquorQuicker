@@ -79,7 +79,7 @@ def load_locations(request):
 
 def filter_by_city(request, city):
     filtered_stores = LiquorLocation.objects.filter(city__iexact=city)
-    context = {'city' : city, 'filtered_stores' : filtered_stores}
+    context = {'city' : city, 'filtered_stores' : filtered_stores, 'locations' : serializers.serialize("json", LiquorLocation.objects.exclude(city__isnull=True))}
     return render(request, 'Map/filter_by_city.html', context)
 
 def favourite_store(request):
