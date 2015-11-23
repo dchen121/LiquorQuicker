@@ -118,10 +118,11 @@ def closest_points(request):
     if request.method == "GET":
         lat = float(request.GET['lat'])
         lng = float(request.GET['lng'])
+        count = int(request.GET['count'])
         all_locations = LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
-        sorted_locations = utils.get_closest_points(lat, lng, all_locations, 5)
+        sorted_locations = utils.get_closest_points(lat, lng, all_locations, count)
 
         if len(sorted_locations) < 1:
             raise Http404("No results found")
         else:
-            return HttpResponse(serializers.serialize("json", [sorted_locations[4]]), content_type='application/json')
+            return HttpResponse(serializers.serialize("json", [sorted_locations[count-1]]), content_type='application/json')
