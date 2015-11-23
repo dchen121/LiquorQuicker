@@ -2,6 +2,7 @@ var map;
 var geocoder;
 var markers = [];
 var currentLocation = null;
+var myLocation;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
