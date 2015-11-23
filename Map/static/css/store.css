@@ -36,6 +36,7 @@ header {
 	padding: 0 30px;
 	padding-bottom: 50px;
 	text-align: justify;
+	word-wrap: normal;
 }
 
 .review-form {
@@ -47,3 +48,12 @@ header {
 .control-label {
 	color: white;
 }
+
+#map {
+        min-width: 100px;
+        width: 100%;
+        min-height: 100px;
+        height: 60%;
+        position: relative;
+        color: black;
+      }

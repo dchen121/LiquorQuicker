@@ -85,20 +85,21 @@
       newA.innerHTML = city + "<br>";
 
       newLi.appendChild(newA);
-            dropdown_menu.appendChild(newLi); // append <li><a href=('filter/' + city) align='center'> city </a></li><br> to dropdown_menu
-          }
-        }
+      dropdown_menu.appendChild(newLi); // append <li><a href=('filter/' + city) align='center'> city </a></li><br> to dropdown_menu
+    }
+  }
 
-        function contains(list, item) {
-          for (var i = 0; i < list.length; i++) {
-            if (item === list[i]) {
-              return true;
-            }
-          }
-          return false;
-        }
+  function contains(list, item) {
+    for (var i = 0; i < list.length; i++) {
+      if (item === list[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
 
         </script>
+
 
       </head>
       <body>
@@ -106,7 +107,7 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top" style="position:relative">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="{%url 'map:map'%}">Liquor Quicker</a>
@@ -139,8 +140,12 @@
         {%block favourite%}
         {%endblock favourite%}
         <hr>
-      </div>
+      </div>  
     </div>
+
+    <!-- {% if store.latitude != null %}
+    <div id="map" style="width: 50%; height: 50%; float:right;"></div>
+    {% endif %} -->
 
     <div class="row-fluid row1">
       <div class="col-xs-4">
@@ -179,8 +184,52 @@
 
       </div>
     </div>
+
+    {% if store.latitude != null %}
+    <div id="map"></div>
+    {% endif %}
+
   </div>
 </div>
+
+
+
+
+    <script>
+
+function initMap() {
+
+  var myLatLng = {lat: {{ latitude }}, lng: {{ longitude }}};
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: myLatLng
+  });
+
+  var infowindow = new google.maps.InfoWindow({
+    content: "<div><p color='black'>{{ store }}</p><p>{{ address }}</p></div>"
+  });
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: "{{ store }}"
+  });
+
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+
+  infowindow.open(map,marker);
+
+}
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDw3QjnTZGH6JIV9NyKnrXsxo6acAKITJY&signed_in=true&callback=initMap"></script>
+
+
+
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
