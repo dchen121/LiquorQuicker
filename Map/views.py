@@ -52,8 +52,8 @@ def add_review(request, pk):
         review.comment = comment
         review.pub_date = datetime.now()
         review.save()
-        store.avg_rating = store.get_average_rating()
-        store.save()
+        #store.avg_rating = store.get_average_rating()
+        #store.save()
         return redirect('map:store',pk)
     return render(request, 'StoreProfile/index.html', {'store': store, 'ratings':ratings, 'form': form})
 

@@ -25,7 +25,12 @@ class LiquorLocation(models.Model):
 
     def get_average_rating(self):
         ratings = self.getRatings()
-        return np.mean(ratings)
+        if len(ratings) == 0:
+            return "No user ratings"
+        else:
+            self.avg_rating = np.mean(ratings)
+            self.save()
+            return str(np.mean(ratings)) + " out of 5"
 
     def getPrices(self):
         pricingList = []
@@ -36,7 +41,10 @@ class LiquorLocation(models.Model):
 
     def average_price(self):
         prices = self.getPrices()
-        return np.mean(prices)
+        if len(prices) == 0:
+            return "No user pricing"
+        else:
+            return "$" + str(np.mean(prices))
 
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):

@@ -35,33 +35,8 @@
 
   <script type="text/javascript">
 
+
   window.onload = function averageRating() {
-    var ratings = {{ ratings|safe }};
-
-    var cummulativeRating = 0;
-    var numRatings = 0;
-    var averageRating = 0;
-
-    for (var i = 0; i < ratings.length; i++) {
-      cummulativeRating = cummulativeRating + ratings[i];
-      numRatings = numRatings + 1;
-    }
-
-    averageRating = cummulativeRating/numRatings;
-    averageRating = averageRating.toFixed(1);
-
-    var rating = document.getElementById('rating');
-    var averageRatings = document.createElement('span');
-    averageRatings.class = 'data';
-
-    if (ratings.length == 0) {
-      averageRatings.innerHTML = "There are no ratings"
-    } else {
-      averageRatings.innerHTML = averageRating + "/5";
-    }
-
-    rating.appendChild(averageRatings);
-
 
     var locations = {{ locations|safe }};
     cities = [];
@@ -134,7 +109,7 @@
     <div class="row-fluid">
       <div class="col-xs-12">
         <header> 
-          <h1>{{store.store_name}}</h1>
+          <h1>{{store.name}}</h1>
           <p>{{store.address}} <br> {{store.city}}</p>
         </header>
         {%block favourite%}
@@ -150,11 +125,14 @@
     <div class="row-fluid row1">
       <div class="col-xs-4">
         <div class="new-group">
-          <div class="title"> Price </div>
-          <span class="data"> ${{ store.average_price | floatformat }} </span> 
+          <div class="title"> Price:
+          <span class="data"> {{store.average_price}} </span> 
+          </div>
         </div>
         <div class="new-group">
-          <div class="title" id="rating"> Rating: </div>
+          <div class="title" id="rating"> Rating: 
+          <span class="data"> {{store.get_average_rating}}</span> 
+          </div>
         </div>
         <hr>
         <div class="new-group review-form">
