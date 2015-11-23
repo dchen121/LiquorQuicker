@@ -64,6 +64,8 @@ def load_locations(request):
     left = None
 
     if request.method == 'POST':
+        min_rating = float(request.POST['minRating'])
+        sort_by_rating = request.POST['sortByRating']
         lat = request.POST['lat']
         lng = request.POST['lng']
         top = request.POST['top']
@@ -77,8 +79,16 @@ def load_locations(request):
             longitude__gt=left
             ).filter(longitude__lt=right)
 
-        if (lat and lng):
-            locations = utils.get_closest_points(float(lat), float(lng), locations, locations.count())
+        # filter by min. rating
+        locations = locations.filter(avg_rating__gte=min_rating)
+
+        if (sort_by_rating):
+            # sort by recommended
+            locations = locations.order_by('avg_rating')
+        else: 
+            # sort by distance
+            if (lat and lng):
+                locations = utils.get_closest_points(float(lat), float(lng), locations, locations.count())
 
         if len(locations) < 1:
             raise Http404("No locations found in this area.")

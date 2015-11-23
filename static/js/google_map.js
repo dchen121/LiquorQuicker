@@ -12,10 +12,12 @@ function initMap() {
 
   map.addListener('idle', function() {
     var bounds = map.getBounds();
-    var map_top = bounds.getNorthEast().lat();
-    var map_bottom = bounds.getSouthWest().lat();
-    var map_right = bounds.getNorthEast().lng();
-    var map_left = bounds.getSouthWest().lng();
+    var mapTop = bounds.getNorthEast().lat();
+    var mapBottom = bounds.getSouthWest().lat();
+    var mapRight = bounds.getNorthEast().lng();
+    var mapLeft = bounds.getSouthWest().lng();
+    var minRating = parseInt($('input[name="min-rating"').val());
+    var sortByRating = $('input[name="sort-by"][value="rating"]').is(":checked");
     var lat = null;
     var lng = null;
 
@@ -27,10 +29,12 @@ function initMap() {
     $.post('/load_locations/', { 
       lat: lat,
       lng: lng,
-      top: map_top, 
-      bottom: map_bottom, 
-      right: map_right, 
-      left: map_left,
+      top: mapTop, 
+      bottom: mapBottom, 
+      right: mapRight, 
+      left: mapLeft,
+      minRating: minRating,
+      sortByRating: sortByRating, 
       csrfmiddlewaretoken: getCookie("csrftoken")
     }, function(data) {
       clearMarkers();
@@ -57,78 +61,6 @@ function createMarker(latLng) {
   markers.push(marker);
   return marker;
 }
-
-function createResultEntry(storeId, storeName, address, rating) {
-  $('<li/>', {
-    'class': 'result',
-    'data-storeid': storeId
-  }).appendTo('ul.results-list');
-  $('<strong/>', {
-    text: storeName
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-  $('<p/>', {
-    text: address
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-  if (rating) {
-    $('<p/>', {
-      text: "Rating: " + rating
-    }).appendTo(".result[data-storeid='" + storeId + "']");
-  }
-  $('<a/>', {
-    href: '/store/' + storeId,
-    text: "More Information..."
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-}
-
-function linkResultToMarker(marker, storeId) {
-  $(".result[data-storeid='" + storeId + "']").hover(function() {
-    marker.setOpacity(1.0);
-    $(this).css("background-color", "#B9E5F3");
-  }, function() {
-    if (!marker.getAnimation()) {
-      marker.setOpacity(0.5);
-      $(this).css("background-color", "");
-    }
-  });
-
-  $(".result[data-storeid='" + storeId + "']").click(function() {
-    if ($(this).hasClass('active')) {
-      marker.setAnimation(null);
-      marker.setOpacity(0.5);
-      $(this).removeClass('active');
-      $(this).css("background-color", "");
-    } else {
-      $('.result.active').trigger('click');
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-      $(this).addClass('active');
-    }
-  });
-}
-
-function linkMarkerToResult(marker, storeId) {
-  marker.addListener('mouseover', function() {
-    $(".result[data-storeid='" + storeId + "']").trigger('mouseenter');
-    var resultPosition = $(".result[data-storeid='" + storeId + "']").offset().top;
-    var paneTop = $(".results-container").offset().top;
-    var paneBottom = paneTop + $(".results-container").height();
-
-    if (resultPosition > paneBottom || resultPosition < paneTop) {
-      $(".results-container").animate({
-          scrollTop: resultPosition - 45 - 50
-      }, 500);
-    }
-  });
-
-  marker.addListener('mouseout', function() {
-    $(".results-container").stop(true,false);
-    $(".result[data-storeid='" + storeId + "']").trigger('mouseleave');
-  });
-
-  marker.addListener('click', function() {
-    $(".result[data-storeid='" + storeId + "']").trigger('click');
-  });
-}
-
 
 function plotLocations(locations) {
   for (var j = 0; j < locations.length; j++) {

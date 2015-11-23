@@ -19,7 +19,6 @@
 <script src="{% static 'js/search.js' %}"></script>
 
 <link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
-<link rel= "stylesheet" type = "text/css" href = "{% static 'css/homepage.css'%}">
 
   </head>
   <body>
@@ -42,11 +41,11 @@
                 <ul class="dropdown-menu map-options" aria-labelledby="map-options-btn">
                   <form id="map-options">
                     <li><strong>Sort By:</strong></li>
-                    <li><input type="radio" name="sort-by" value="rating"> Rating</li>
                     <li><input type="radio" name="sort-by" value="distance"> Distance</li>
+                    <li><input type="radio" name="sort-by" value="rating"> Rating</li>
                     <li role="separator" class="divider"></li>
                     <li><strong>Filter by Min. Rating</strong></li>
-                    <li><input type="range" name="min-rating" min="0" max="5"></li>
+                    <li><input type="range" name="min-rating" value="0" min="0" max="5"></li>
                     <li><em>Rating: </em><span id="min-rating-value">0</span></li>
                     <li role="separator" class="divider"></li>
                     <li><button class="btn btn-default" type="submit">Apply</button></li>
