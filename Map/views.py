@@ -86,11 +86,9 @@ def load_locations(request):
         if (sort_by_rating == 'true'):
             # sort by recommended
             locations = locations.order_by('avg_rating')
-            print("why would it go here")
         else: 
             # sort by distance
             if (lat and lng):
-                print("hello")
                 locations = utils.get_closest_points(float(lat), float(lng), locations, locations.count())
 
         if len(locations) < 1:
