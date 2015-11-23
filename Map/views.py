@@ -29,11 +29,12 @@ def store_profile(request, pk):
     latitude = store.latitude;
     longitude = store.longitude;
     address = store.address;
+    average_rating = LiquorLocation.get_average_rating(store);
 
     if request.user.is_authenticated():
-        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'user': request.user, 'form':ReviewForm()})
+        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'ratings':ratings, 'average_rating': average_rating, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'user': request.user, 'form':ReviewForm()})
     else:
-        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'form':ReviewForm()})
+        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'ratings':ratings, 'average_rating': average_rating, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'form':ReviewForm()})
 
 def add_review(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)

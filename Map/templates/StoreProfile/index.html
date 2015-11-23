@@ -35,34 +35,7 @@
 
   <script type="text/javascript">
 
-  window.onload = function averageRating() {
-    var ratings = {{ ratings|safe }};
-
-    var cummulativeRating = 0;
-    var numRatings = 0;
-    var averageRating = 0;
-
-    for (var i = 0; i < ratings.length; i++) {
-      cummulativeRating = cummulativeRating + ratings[i];
-      numRatings = numRatings + 1;
-    }
-
-    averageRating = cummulativeRating/numRatings;
-    averageRating = averageRating.toFixed(1);
-
-    var rating = document.getElementById('rating');
-    var averageRatings = document.createElement('span');
-    averageRatings.class = 'data';
-
-    if (ratings.length == 0) {
-      averageRatings.innerHTML = "There are no ratings"
-    } else {
-      averageRatings.innerHTML = averageRating + "/5";
-    }
-
-    rating.appendChild(averageRatings);
-
-
+  window.onload = function loadDropdownMenu() {
     var locations = {{ locations|safe }};
     cities = [];
     for (var j = 0; j < locations.length; j++) {
@@ -154,7 +127,7 @@
           <span class="data"> ${{ store.average_price | floatformat }} </span> 
         </div>
         <div class="new-group">
-          <div class="title" id="rating"> Rating: </div>
+          <div class="title" id="rating"> Rating: {{average_rating}}/5.0</div>
         </div>
         <hr>
         <div class="new-group review-form">
