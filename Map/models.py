@@ -44,7 +44,7 @@ class LiquorLocation(models.Model):
         if len(prices) == 0:
             return "No user pricing"
         else:
-            return "$" + str(round(np.mean(prices),1))
+            return "$" + str(round(np.mean(prices),2))
 
     # Use Google Maps API Geocoding service to get the latitude/longitude for a certain address
     def get_lat_long(self):
