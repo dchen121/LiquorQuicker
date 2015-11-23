@@ -9,7 +9,6 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from . import utils
 
-
 class MapView(TemplateView):
     """
     A view of the Map
@@ -18,8 +17,6 @@ class MapView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(MapView, self).get_context_data(**kwargs)
-        context['geocode_locations'] = serializers.serialize("json", LiquorLocation.objects.filter(latitude__isnull=True))
-        context['init_locations'] = serializers.serialize("json", LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True))
         context['locations'] = serializers.serialize("json", LiquorLocation.objects.exclude(city__isnull=True))
         return context
 
@@ -63,12 +60,14 @@ def load_locations(request):
     bottom = None
     right = None
     left = None
-    
-    if request.method == "GET":
-        top = request.GET['top']
-        bottom = request.GET['bottom']
-        right = request.GET['right']
-        left = request.GET['left']
+
+    if request.method == 'POST':
+        lat = request.POST['lat']
+        lng = request.POST['lng']
+        top = request.POST['top']
+        bottom = request.POST['bottom']
+        right = request.POST['right']
+        left = request.POST['left']
 
         locations = LiquorLocation.objects.filter(
             latitude__gt=bottom
@@ -76,10 +75,14 @@ def load_locations(request):
             longitude__gt=left
             ).filter(longitude__lt=right)
 
-        if locations.count() < 1:
+        if (lat and lng):
+            locations = utils.get_closest_points(float(lat), float(lng), locations, locations.count())
+
+        if len(locations) < 1:
             raise Http404("No locations found in this area.")
         else:
             return HttpResponse(serializers.serialize("json", locations), content_type='application/json')
+
 
 def filter_by_city(request, city):
     filtered_stores = LiquorLocation.objects.filter(city__iexact=city)
@@ -102,14 +105,10 @@ def closest_points(request):
     if request.method == "GET":
         lat = float(request.GET['lat'])
         lng = float(request.GET['lng'])
-        all_locations = LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True).values_list('id', 'latitude', 'longitude')
-        point = utils.get_closest_points(lat, lng, all_locations)
-        locations = get_list_or_404(LiquorLocation, pk=point)
+        all_locations = LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
+        sorted_locations = utils.get_closest_points(lat, lng, all_locations, 5)
 
-        return HttpResponse(serializers.serialize("json", locations), content_type='application/json')
-
-
-
-        
-
-
+        if len(sorted_locations) < 1:
+            raise Http404("No results found")
+        else:
+            return HttpResponse(serializers.serialize("json", sorted_locations), content_type='application/json')

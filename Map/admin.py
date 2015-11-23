@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import LiquorLocation, Review
-from .parser import Parser
+from .parser import LocationParser
 
 # Register your models here.
 class LiquorLocationAdmin(admin.ModelAdmin):

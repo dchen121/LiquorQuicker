@@ -11,23 +11,34 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map.addListener('idle', function() {
-    bounds = map.getBounds();
-    map_top = bounds.getNorthEast().lat();
-    map_bottom = bounds.getSouthWest().lat();
-    map_right = bounds.getNorthEast().lng();
-    map_left = bounds.getSouthWest().lng();
-    var jqxhr = $.getJSON('/load_locations', { 
+    var bounds = map.getBounds();
+    var map_top = bounds.getNorthEast().lat();
+    var map_bottom = bounds.getSouthWest().lat();
+    var map_right = bounds.getNorthEast().lng();
+    var map_left = bounds.getSouthWest().lng();
+    var lat = null;
+    var lng = null;
+
+    if (currentLocation) {
+      lat = currentLocation.position.lat();
+      lng = currentLocation.position.lng();
+    }
+
+    $.post('/load_locations/', { 
+      lat: lat,
+      lng: lng,
       top: map_top, 
       bottom: map_bottom, 
-      right: map_right , 
-      left: map_left 
+      right: map_right, 
+      left: map_left,
+      csrfmiddlewaretoken: getCookie("csrftoken")
     }, function(data) {
       clearMarkers();
       $('ul.results-list').empty();
       plotLocations(data);
-    });
+    }, 'json');
   });
-  }
+}
 
 function clearMarkers() {
   for (var i = 0; i < markers.length; i++) {
@@ -36,7 +47,7 @@ function clearMarkers() {
   markers = [];
 }
 
-function createMarker(storeName, address, latLng) {
+function createMarker(latLng) {
   var marker = new google.maps.Marker({
     map: map,
     position: latLng,
@@ -104,6 +115,7 @@ function linkMarkerToResult(marker, storeId) {
   });
 
   marker.addListener('mouseout', function() {
+    $(".results-container").stop(true,false);
     $(".result[data-storeid='" + storeId + "']").trigger('mouseleave');
   });
 
@@ -116,9 +128,26 @@ function linkMarkerToResult(marker, storeId) {
 function plotLocations(locations) {
   for (var j = 0; j < locations.length; j++) {
     loc = locations[j];
-    marker = createMarker(loc.fields.name, loc.fields.address + ", " + loc.fields.city, {'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
+    marker = createMarker({'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
     createResultEntry(loc.pk, loc.fields.name, loc.fields.address + ", " + loc.fields.city);
     linkResultToMarker(marker, loc.pk);
     linkMarkerToResult(marker, loc.pk);
   }
+}
+
+// Django code for getting csrftoken for AJAX requests (https://docs.djangoproject.com/en/1.8/ref/csrf/#ajax)
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) == (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
 }
