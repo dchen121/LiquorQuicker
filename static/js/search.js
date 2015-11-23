@@ -13,10 +13,12 @@ $(document).ready(function() {
 				var lng = results[0].geometry.location.lng();
 				var count = 5;
 				$.get('/closest_points', { lat: lat, lng: lng }, function(data) {
-					map.setZoom(20);
-					var bounds = map.getBounds();
-					bounds.extend(new google.maps.LatLng(data[4].fields.latitude,data[4].fields.longitude));
-					map.fitBounds(bounds);
+					var farPoint = new google.maps.LatLng(data[0].fields.latitude,data[0].fields.longitude);
+					var zoom = 20;
+					map.setZoom(zoom);
+					while (!map.getBounds().contains(farPoint)) {
+						map.setZoom(--zoom);
+					}
 				});
 			} else {
 				// Add an error message

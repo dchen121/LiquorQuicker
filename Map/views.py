@@ -111,4 +111,4 @@ def closest_points(request):
         if len(sorted_locations) < 1:
             raise Http404("No results found")
         else:
-            return HttpResponse(serializers.serialize("json", sorted_locations), content_type='application/json')
+            return HttpResponse(serializers.serialize("json", [sorted_locations[4]]), content_type='application/json')

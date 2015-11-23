@@ -4,36 +4,45 @@
 <html>
 <head>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
-  <script src="{% static 'js/google_map.js' %}"></script>
-  <script src="{% static 'js/search.js' %}"></script>
+<script src="{% static 'js/google_map.js' %}"></script>
+<script src="{% static 'js/search.js' %}"></script>
 
-  <link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
+<link rel= "stylesheet" type = "text/css" href = "{% static 'css/map.css'%}">
+<link rel= "stylesheet" type = "text/css" href = "{% static 'css/homepage.css'%}">
 
-</head>
-<body>
-  <nav>
-    {%block header%}
-    {%endblock header%}
-  </nav>
+  </head>
+  <body>
+      <nav>
+          {%block header%}
+          {%endblock header%}
+      </nav>
 
-  <div class ="container-fluid content-container">
-    <div class="row map-container">
-      <div id="list-pane" class="col-md-4">
-        <div class="row search-container">
-          <form id="search-bar" class="search-box">
-            <input id="search-bar-input" type="text" class="form-control" placeholder="Search..."/>
-          </form>
+      <div class ="container-fluid content-container">
+        <div class="row map-container">
+          <div id="list-pane" class="col-xs-3">
+            <div class="row search-container">
+              <form id="search-bar" class="search-box">
+                <input id="search-bar-input" type="text" class="form-control" placeholder="Search..."/>
+              </form>
+            </div>
+            <div class="row results-container">
+              <ul class="results-list">
+              </ul>
+            </div>
+
+          </div>
+          <div id="map" class="col-md-9"></div>
         </div>
         <div class="row results-container">
           <ul class="results-list">
