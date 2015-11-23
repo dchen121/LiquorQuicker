@@ -11,6 +11,10 @@ $(document).ready(function() {
 	$('#quick-liquor-btn').click(function(e) {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
+				if (currentLocation) {
+					currentLocation.setMap(null);
+					currentLocation = null;
+				}
 				var myLocation = {
 				  lat: position.coords.latitude,
 				  lng: position.coords.longitude
