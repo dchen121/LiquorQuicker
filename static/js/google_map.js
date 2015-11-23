@@ -58,7 +58,7 @@ function createMarker(latLng) {
   return marker;
 }
 
-function createResultEntry(storeId, storeName, address) {
+function createResultEntry(storeId, storeName, address, rating) {
   $('<li/>', {
     'class': 'result',
     'data-storeid': storeId
@@ -69,6 +69,11 @@ function createResultEntry(storeId, storeName, address) {
   $('<p/>', {
     text: address
   }).appendTo(".result[data-storeid='" + storeId + "']");
+  if (rating) {
+    $('<p/>', {
+      text: "Rating: " + rating
+    }).appendTo(".result[data-storeid='" + storeId + "']");
+  }
   $('<a/>', {
     href: '/store/' + storeId,
     text: "More Information..."
@@ -129,7 +134,7 @@ function plotLocations(locations) {
   for (var j = 0; j < locations.length; j++) {
     loc = locations[j];
     marker = createMarker({'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
-    createResultEntry(loc.pk, loc.fields.name, loc.fields.address + ", " + loc.fields.city);
+    createResultEntry(loc.pk, loc.fields.name, loc.fields.address + ", " + loc.fields.city, loc.fields.avg_rating);
     linkResultToMarker(marker, loc.pk);
     linkMarkerToResult(marker, loc.pk);
   }

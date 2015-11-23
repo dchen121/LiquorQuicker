@@ -35,6 +35,24 @@
               <form id="search-bar" class="search-box">
                 <input id="search-bar-input" type="text" class="form-control" placeholder="Search..."/>
               </form>
+              <div class="dropdown" style="display: inline-block">
+                <button type="button" class="btn dropdown-toggle" id="map-options-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" aria-label="Map Options">
+                  <span class="glyphicon glyphicon-option-vertical" style="color:white"></span>
+                </button>
+                <ul class="dropdown-menu map-options" aria-labelledby="map-options-btn">
+                  <form id="map-options">
+                    <li><strong>Sort By:</strong></li>
+                    <li><input type="radio" name="sort-by" value="rating"> Rating</li>
+                    <li><input type="radio" name="sort-by" value="distance"> Distance</li>
+                    <li role="separator" class="divider"></li>
+                    <li><strong>Filter by Min. Rating</strong></li>
+                    <li><input type="range" name="min-rating" min="0" max="5"></li>
+                    <li><em>Rating: </em><span id="min-rating-value">0</span></li>
+                    <li role="separator" class="divider"></li>
+                    <li><button class="btn btn-default" type="submit">Apply</button></li>
+                  </form>
+                </ul>
+              </div>
             </div>
             <div class="row results-container">
               <ul class="results-list">
