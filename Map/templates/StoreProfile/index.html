@@ -36,7 +36,7 @@
   <script type="text/javascript">
 
 
-  window.onload = function averageRating() {
+  window.onload = function loadDropdownMenu() {
 
     var locations = {{ locations|safe }};
     cities = [];
@@ -130,6 +130,7 @@
           </div>
         </div>
         <div class="new-group">
+
           <div class="title" id="rating"> Rating: 
           <span class="data"> {{store.get_average_rating}}</span> 
           </div>

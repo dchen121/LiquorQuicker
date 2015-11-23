@@ -14,6 +14,8 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        <li><button type="button" class="btn btn-default" id="quick-liquor-btn">
+          <strong>I WANT <span class="glyphicon glyphicon-glass"></span> NOW!</strong></button></li>
 
         <script type="text/javascript">
         var locations = {{ locations|safe }};
@@ -72,6 +74,7 @@
        <li><a href = "{% url 'profile:signup' %}"> Register</a></li>
        {%endif%}
      </ul>
+
    </div>
  </div>
 </nav>

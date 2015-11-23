@@ -65,3 +65,7 @@ html, body { height: 100%;
   padding-left: 10px;
   padding-right: 10px;
 }
+
+#quick-liquor-btn {
+  margin-top: 5%;
+}

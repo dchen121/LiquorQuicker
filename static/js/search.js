@@ -8,6 +8,32 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
+	$('#quick-liquor-btn').click(function(e) {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var myLocation = {
+				  lat: position.coords.latitude,
+				  lng: position.coords.longitude
+				};
+				if (myLocation) {
+					var closestPointsOptions = myLocation;
+					closestPointsOptions['count'] = 1;
+					map.setCenter(myLocation);
+					markLocation(myLocation);
+					$.get('/closest_points', closestPointsOptions, function(data) {
+						var bounds = new google.maps.LatLngBounds(map.getCenter(), map.getCenter());
+						var closePoint = new google.maps.LatLng(data[0].fields.latitude,data[0].fields.longitude);
+						bounds = bounds.extend(closePoint);
+						map.fitBounds(bounds);
+					});
+				}
+			}, function() {
+				console.log("Error: Geolocation failed.");
+			});
+		} else {
+			console.log("Error: The browser doesn't support geolocation.");
+		}
+	});
 
   	$('#search-bar').submit(function(event) {
 		geocoder.geocode({'address': $('#search-bar-input').val()}, function(results, status) {
@@ -24,7 +50,7 @@ $(document).ready(function() {
 				var lat = results[0].geometry.location.lat();
 				var lng = results[0].geometry.location.lng();
 				var count = 5;
-				$.get('/closest_points', { lat: lat, lng: lng }, function(data) {
+				$.get('/closest_points', { lat: lat, lng: lng, count: 5 }, function(data) {
 					var farPoint = new google.maps.LatLng(data[0].fields.latitude,data[0].fields.longitude);
 					while (!map.getBounds().contains(farPoint) || zoom <= 0) {
 						map.setZoom(--zoom);

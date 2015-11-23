@@ -24,16 +24,16 @@ def store_profile(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)
     # most_recent = LiquorLocation.review_set.order_by('pub_date')
 
-    ratings = LiquorLocation.getRatings(store);
     locations = serializers.serialize("json", LiquorLocation.objects.exclude(city__isnull=True))
     latitude = store.latitude;
     longitude = store.longitude;
     address = store.address;
+    average_rating = LiquorLocation.get_average_rating(store);
 
     if request.user.is_authenticated():
-        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'user': request.user, 'form':ReviewForm()})
+        return render(request,'StoreProfile/authenticated_user.html',{'store':store, 'average_rating': average_rating, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'user': request.user, 'form':ReviewForm()})
     else:
-        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'ratings':ratings, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'form':ReviewForm()})
+        return render(request,'StoreProfile/anonymous_user.html',{'store':store, 'average_rating': average_rating, 'locations': locations, 'address': address, 'latitude': latitude, 'longitude': longitude, 'form':ReviewForm()})
 
 def add_review(request, pk):
     store = get_object_or_404(LiquorLocation, pk=pk)
@@ -118,10 +118,11 @@ def closest_points(request):
     if request.method == "GET":
         lat = float(request.GET['lat'])
         lng = float(request.GET['lng'])
+        count = int(request.GET['count'])
         all_locations = LiquorLocation.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
-        sorted_locations = utils.get_closest_points(lat, lng, all_locations, 5)
+        sorted_locations = utils.get_closest_points(lat, lng, all_locations, count)
 
         if len(sorted_locations) < 1:
             raise Http404("No results found")
         else:
-            return HttpResponse(serializers.serialize("json", [sorted_locations[4]]), content_type='application/json')
+            return HttpResponse(serializers.serialize("json", [sorted_locations[count-1]]), content_type='application/json')

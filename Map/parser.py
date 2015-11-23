@@ -95,6 +95,7 @@ class Parser(metaclass=ABCMeta):
         """
         value = value.title()  # format text
         value = re.sub(r'[\t\n\r ]+', ' ', value)  # remove extra whitespace
+        value = value.strip() # remove leading and trailing whitespace
 
         if key in cls.formatting:
             fmat = cls.formatting[key]
