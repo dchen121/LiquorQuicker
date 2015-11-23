@@ -16,7 +16,7 @@ function initMap() {
     var mapBottom = bounds.getSouthWest().lat();
     var mapRight = bounds.getNorthEast().lng();
     var mapLeft = bounds.getSouthWest().lng();
-    var minRating = parseInt($('input[name="min-rating"').val());
+    var minRating = parseInt($('input[name="min-rating"]').val());
     var sortByRating = $('input[name="sort-by"][value="rating"]').is(":checked");
     var lat = null;
     var lng = null;
@@ -25,7 +25,7 @@ function initMap() {
       lat = currentLocation.position.lat();
       lng = currentLocation.position.lng();
     }
-
+    
     $.post('/load_locations/', { 
       lat: lat,
       lng: lng,
