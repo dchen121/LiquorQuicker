@@ -11,6 +11,7 @@ class LiquorLocation(models.Model):
     city = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    avg_rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.name
@@ -21,6 +22,10 @@ class LiquorLocation(models.Model):
             if review.rating > 0:
                 ratingList.append(review.rating)
         return ratingList
+
+    def get_average_rating(self):
+        ratings = self.getRatings()
+        return np.mean(ratings)
 
     def getPrices(self):
         pricingList = []

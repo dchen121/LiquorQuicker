@@ -11,23 +11,38 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map.addListener('idle', function() {
-    bounds = map.getBounds();
-    map_top = bounds.getNorthEast().lat();
-    map_bottom = bounds.getSouthWest().lat();
-    map_right = bounds.getNorthEast().lng();
-    map_left = bounds.getSouthWest().lng();
-    var jqxhr = $.getJSON('/load_locations', { 
-      top: map_top, 
-      bottom: map_bottom, 
-      right: map_right , 
-      left: map_left 
+    var bounds = map.getBounds();
+    var mapTop = bounds.getNorthEast().lat();
+    var mapBottom = bounds.getSouthWest().lat();
+    var mapRight = bounds.getNorthEast().lng();
+    var mapLeft = bounds.getSouthWest().lng();
+    var minRating = parseInt($('input[name="min-rating"]').val());
+    var sortByRating = $('input[name="sort-by"][value="rating"]').is(":checked");
+    var lat = null;
+    var lng = null;
+
+    if (currentLocation) {
+      lat = currentLocation.position.lat();
+      lng = currentLocation.position.lng();
+    }
+    
+    $.post('/load_locations/', { 
+      lat: lat,
+      lng: lng,
+      top: mapTop, 
+      bottom: mapBottom, 
+      right: mapRight, 
+      left: mapLeft,
+      minRating: minRating,
+      sortByRating: sortByRating, 
+      csrfmiddlewaretoken: getCookie("csrftoken")
     }, function(data) {
       clearMarkers();
       $('ul.results-list').empty();
       plotLocations(data);
-    });
+    }, 'json');
   });
-  }
+}
 
 function clearMarkers() {
   for (var i = 0; i < markers.length; i++) {
@@ -36,7 +51,7 @@ function clearMarkers() {
   markers = [];
 }
 
-function createMarker(storeName, address, latLng) {
+function createMarker(latLng) {
   var marker = new google.maps.Marker({
     map: map,
     position: latLng,
@@ -47,78 +62,29 @@ function createMarker(storeName, address, latLng) {
   return marker;
 }
 
-function createResultEntry(storeId, storeName, address) {
-  $('<li/>', {
-    'class': 'result',
-    'data-storeid': storeId
-  }).appendTo('ul.results-list');
-  $('<strong/>', {
-    text: storeName
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-  $('<p/>', {
-    text: address
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-  $('<a/>', {
-    href: '/store/' + storeId,
-    text: "More Information..."
-  }).appendTo(".result[data-storeid='" + storeId + "']");
-}
-
-function linkResultToMarker(marker, storeId) {
-  $(".result[data-storeid='" + storeId + "']").hover(function() {
-    marker.setOpacity(1.0);
-    $(this).css("background-color", "#B9E5F3");
-  }, function() {
-    if (!marker.getAnimation()) {
-      marker.setOpacity(0.5);
-      $(this).css("background-color", "");
-    }
-  });
-
-  $(".result[data-storeid='" + storeId + "']").click(function() {
-    if ($(this).hasClass('active')) {
-      marker.setAnimation(null);
-      marker.setOpacity(0.5);
-      $(this).removeClass('active');
-      $(this).css("background-color", "");
-    } else {
-      $('.result.active').trigger('click');
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-      $(this).addClass('active');
-    }
-  });
-}
-
-function linkMarkerToResult(marker, storeId) {
-  marker.addListener('mouseover', function() {
-    $(".result[data-storeid='" + storeId + "']").trigger('mouseenter');
-    var resultPosition = $(".result[data-storeid='" + storeId + "']").offset().top;
-    var paneTop = $(".results-container").offset().top;
-    var paneBottom = paneTop + $(".results-container").height();
-
-    if (resultPosition > paneBottom || resultPosition < paneTop) {
-      $(".results-container").animate({
-          scrollTop: resultPosition - 45 - 50
-      }, 500);
-    }
-  });
-
-  marker.addListener('mouseout', function() {
-    $(".result[data-storeid='" + storeId + "']").trigger('mouseleave');
-  });
-
-  marker.addListener('click', function() {
-    $(".result[data-storeid='" + storeId + "']").trigger('click');
-  });
-}
-
-
 function plotLocations(locations) {
   for (var j = 0; j < locations.length; j++) {
     loc = locations[j];
-    marker = createMarker(loc.fields.name, loc.fields.address + ", " + loc.fields.city, {'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
-    createResultEntry(loc.pk, loc.fields.name, loc.fields.address + ", " + loc.fields.city);
+    marker = createMarker({'lat': loc.fields.latitude, 'lng': loc.fields.longitude });
+    createResultEntry(loc.pk, loc.fields.name, loc.fields.address + ", " + loc.fields.city, loc.fields.avg_rating);
     linkResultToMarker(marker, loc.pk);
     linkMarkerToResult(marker, loc.pk);
   }
+}
+
+// Django code for getting csrftoken for AJAX requests (https://docs.djangoproject.com/en/1.8/ref/csrf/#ajax)
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) == (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
 }

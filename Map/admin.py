@@ -1,14 +1,14 @@
 from django.contrib import admin
 from .models import LiquorLocation, Review
-from .parser import Parser
+from .parser import LocationParser
 
 # Register your models here.
 class LiquorLocationAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['name', 'address', 'city']}),
-        ("Longitude/Latitude", {'fields': ['latitude', 'longitude'], 'classes': ['collapse']}),
+        ("Longitude/Latitude", {'fields': ['latitude', 'longitude', 'avg_rating'], 'classes': ['collapse']}),
     ]
-    list_display = ('name', 'address', 'city', 'latitude', 'longitude')
+    list_display = ('name', 'address', 'city', 'latitude', 'longitude', 'avg_rating')
     search_fields = ['name', 'address']
     actions = ['save_lat_long', 'load_data']
 
