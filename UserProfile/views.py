@@ -4,8 +4,7 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import get_object_or_404
 from .forms import SignUpForm
 from UserProfile.models import LQUser
 
@@ -21,7 +20,6 @@ class ProfileView(DetailView):
     template_name = 'UserProfile/profile.html'
 
 
-
 class Login(TemplateView):
     """
     A form for logging a user into the app
@@ -31,6 +29,7 @@ class Login(TemplateView):
 
 class UserNotFound(TemplateView):
     template_name = 'UserProfile/usernotfound.html'
+
 
 class SignUp(FormView):
     """
@@ -49,12 +48,12 @@ class SignUp(FormView):
         auth_user(self.request)
         return super(SignUp, self).form_valid(form)
 
+
 def update_info(request, pk):
     user = get_object_or_404(LQUser, pk=pk)
     user.f_drink = request.POST['f_drink']
     user.save()
-    return render(request, 'UserProfile\profile.html', {'f_drink':user.f_drink})
-
+    return HttpResponseRedirect(reverse('profile:profile', kwargs={'pk': pk}))
 
 
 # from django docs
@@ -72,7 +71,7 @@ def auth_user(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            url_redirect = reverse('profile:profile', kwargs={'pk':user.pk})
+            url_redirect = reverse('profile:profile', kwargs={'pk': user.pk})
             return HttpResponseRedirect(url_redirect)
         else:
             # TODO: Inform user no longer active
@@ -86,10 +85,11 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('map:map'))
 
+
 def user_search(request):
     try:
         username = request.POST['username']
         user = LQUser.objects.get(username=username)
-        return HttpResponseRedirect(reverse('profile:profile', kwargs={'pk':user.pk}))
+        return HttpResponseRedirect(reverse('profile:profile', kwargs={'pk': user.pk}))
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('profile:notfound'))
