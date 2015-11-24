@@ -85,7 +85,7 @@ def load_locations(request):
         # Javascript boolean turns into a string when passed into Python
         if (sort_by_rating == 'true'):
             # sort by recommended
-            locations = locations.order_by('avg_rating')
+            locations = locations.order_by('-avg_rating')
         else: 
             # sort by distance
             if (lat and lng):
