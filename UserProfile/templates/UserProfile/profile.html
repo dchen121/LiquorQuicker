@@ -17,7 +17,7 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
 				{%if user.is_authenticated%}
-				<li><a href = "{% url 'profile:profile' %}"> My Profile </a></li>
+				<li><a href = "{% url 'profile:profile' user.pk %}"> My Profile </a></li>
 				<li><a href = "{% url 'profile:logout' %}"> Logout </a></li>
 				{%else %}
 				<li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
@@ -29,11 +29,23 @@
 </nav>
 
 {% if user.is_authenticated %}
-<center><h1 style="position:relative">Welcome, {{ user.username }}!</h1></center>
+<center><h1 style="position:relative">Welcome, {{ object.username }}!</h1></center>
 {% if user.avatar %}
-<center><img src="{{ user.avatar.url }}" /></center>
+<center><img src="{{ object.avatar.url }}" /></center>
 {% endif %}
-<center><h2>{{ user.first_name }} {{ user.last_name }}</h2></center>
+<center><h2>{{ object.first_name }} {{ object.last_name }}</h2></center>
+<center>
+	<h2>Favorite Bev:</h2>
+	{% if user == object %}
+    <!--TODO: set up edit -->
+	<a href="blank">edit</a>
+	{% endif %}
+</center>
+<center><p>{{ object.favorite_bev }}</p></center>
+<center>
+	<h2>Favorite Store:</h2>
+</center>
+<center><p>{{ object.favorite_store }}</p></center>
 {% else %}
 <center><h1 style="position:relative">Please log in or register to view your profile</h1></center>
 {% endif %}

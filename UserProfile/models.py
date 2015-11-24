@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from Map.models import LiquorLocation
+from Map.models import LiquorLocation, BCLiquor
 
 
 def avatar_directory_path(instance, filename):
@@ -15,6 +15,7 @@ class LQUser(AbstractUser):
     """
     avatar = models.ImageField(upload_to=avatar_directory_path, blank=True)
     favorite_store = models.ForeignKey(LiquorLocation, null=True)
+    favorite_bev = models.ForeignKey(BCLiquor, null=True)
 
     class Meta(AbstractUser.Meta):
         swappable = 'AUTH_USER_MODEL'

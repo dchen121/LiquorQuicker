@@ -4,7 +4,7 @@
 
 
 {%block navbar%}
-<li><a href = "{% url 'profile:profile' %}"> My Profile </a></li>
+<li><a href = "{% url 'profile:profile' user.pk %}"> My Profile </a></li>
 <li><a href = "{% url 'profile:logout' %}"> Logout </a></li>
 {% endblock navbar%}
 

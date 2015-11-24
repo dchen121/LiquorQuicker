@@ -16,8 +16,9 @@
       <ul class="nav navbar-nav navbar-right">
         <li><button type="button" class="btn btn-default" id="quick-liquor-btn">
           <strong>I WANT <span class="glyphicon glyphicon-glass"></span> NOW!</strong></button></li>
-          <li><form id="user-search-bar" class="search-box">
-            <input id="user-search-bar-input" type="text" class="form-control" placeholder="Search Users..."/>
+          <li><form id="user-search-bar" class="search-box" action="{% url 'profile:search' %}" method="post">
+              {% csrf_token %}
+            <input id="user-search-bar-input" type="text" class="form-control" name="username" placeholder="Search Users..."/>
           </form></li>
 
         <script type="text/javascript">
@@ -70,7 +71,7 @@
         </li>
 
         {%if user.is_authenticated%}
-        <li><a href = "{% url 'profile:profile' %}"> My Profile </a></li>
+        <<li><a href = "{% url 'profile:profile' user.pk %}"> My Profile </a></li>
         <li><a href = "{% url 'profile:logout' %}"> Logout </a></li>
        {%else %}
        <li> <a href = "{% url 'profile:login' %}"> Login </a> </li>
