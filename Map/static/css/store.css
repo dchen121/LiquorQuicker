@@ -56,4 +56,6 @@ header {
         height: 60%;
         position: relative;
         color: black;
+        margin-top: 40px;
+        text-align: center;
       }
