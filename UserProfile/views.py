@@ -3,8 +3,9 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm
+from UserProfile.models import LQUser
 
 
 class ProfileView(TemplateView):
@@ -15,6 +16,7 @@ class ProfileView(TemplateView):
     # TODO: create link to profile creation page
     # TODO: beautify profile and display user image
     template_name = 'UserProfile/profile.html'
+
 
 
 class Login(TemplateView):
@@ -40,6 +42,13 @@ class SignUp(FormView):
         user.save()
         auth_user(self.request)
         return super(SignUp, self).form_valid(form)
+
+def update_info(request, pk):
+    user = get_object_or_404(LQUser, pk=pk)
+    user.f_drink = request.POST['f_drink']
+    user.save()
+    return render(request, 'UserProfile\profile.html', {'f_drink':user.f_drink})
+
 
 
 # from django docs
