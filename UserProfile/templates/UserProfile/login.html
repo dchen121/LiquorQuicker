@@ -1,6 +1,29 @@
-<form action="{% url 'profile:auth_user' %}" method="post">
+{%load staticfiles%}
+{%load bootstrap3%}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+
+<html>
+<head>
+
+ <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}" />
+
+<title> Login </title>
+</head>
+
+<body>
+  <section class="container">
+    <div class="login">
+      <h1>Got Account?</h1>
+      <form action="{% url 'profile:auth_user' %}" method="post">
 {% csrf_token %}
 User Name: <input type="text" name="username"><br>
 Password: <input type="password" name="password"><br>
-<input type="submit" value="Submit">
+<div><br></div>
+<input type="submit" value="I do">
 </form>
+    </div>
+</body>
+</section>
