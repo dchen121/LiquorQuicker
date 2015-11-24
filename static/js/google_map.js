@@ -2,6 +2,7 @@ var map;
 var geocoder;
 var markers = [];
 var currentLocation = null;
+var autocomplete;
 var myLocation;
 
 function initMap() {
@@ -10,6 +11,10 @@ function initMap() {
     zoom: 11
   });
   geocoder = new google.maps.Geocoder();
+  autocomplete = new google.maps.places.Autocomplete($('#search-bar-input')[0], {
+    componentRestrictions: {country: 'ca'}
+  });
+
 
   map.addListener('idle', function() {
     var bounds = map.getBounds();
