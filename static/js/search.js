@@ -54,7 +54,7 @@ $(document).ready(function() {
 				var lat = results[0].geometry.location.lat();
 				var lng = results[0].geometry.location.lng();
 				var count = 5;
-				$.get('/closest_points', { lat: lat, lng: lng, count: 5 }, function(data) {
+				$.get('/closest_points/', { lat: lat, lng: lng, count: 5 }, function(data) {
 					var farPoint = new google.maps.LatLng(data[0].fields.latitude,data[0].fields.longitude);
 					while (!map.getBounds().contains(farPoint) || zoom <= 0) {
 						map.setZoom(--zoom);
