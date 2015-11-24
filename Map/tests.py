@@ -132,3 +132,45 @@ class LiquorLocationTests(TestCase):
         review_3.save()
         ratings = store.getRatings()
         self.assertEqual(len(ratings), 3)
+
+    def test_get_average_rating_none(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        avg_rating = store.get_average_rating()
+        self.assertEqual(avg_rating, "No user ratings")
+
+    def test_get_average_rating_one(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, rating=1)
+        review.save()
+        avg_rating = store.get_average_rating()
+        self.assertEqual(avg_rating, '1.0 out of 5')
+
+    def test_get_prices_none(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        prices = store.getPrices()
+        self.assertEqual(prices, [])
+
+    def test_get_prices_one(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, price=8.50)
+        review.save()
+        prices = store.getPrices()
+        self.assertEqual(prices, [8.50])
+
+    def test_get_prices_multiple(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, price=1.50)
+        review.save()
+        review_2 = Review(store=store, price=2.00)
+        review_2.save()
+        review_3 = Review(store=store, price=10.50)
+        review_3.save()
+        prices = store.getPrices()
+        self.assertEqual(len(prices), 3)
+
+
