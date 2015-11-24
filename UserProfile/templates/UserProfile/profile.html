@@ -42,15 +42,12 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/user.css'%}" />
 
 </div><center><h2>{{ object.first_name }} {{ object.last_name }}'s Profile</h2></center>
-{% if user.avatar %}
-<center><img src="{{ object.avatar.url }}" /></center>
-{% endif %}
 
 <span class="header">
-	<center>and {{ object.first_name }}'s favourite store is: {{ object.favorite_store }} {% if user == object %}
-    <!--TODO: set up edit -->
+	<center>and {{ object.first_name }}'s favourite store is: {{ object.favorite_store }} <!-- {% if user == object %}
+    TODO: set up edit 
 	<a href="blank">edit</a>
-	{% endif %} </center></div>
+	{% endif %} --> </center></div>
 <center>and {{ object.first_name }}'s favourite drink is: {{ object.f_drink }}</center></div>
 	</span>
 
