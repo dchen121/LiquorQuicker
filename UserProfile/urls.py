@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^signup/$', views.SignUp.as_view(), name='signup'),
     url(r'^logout/$', views.logout_view, name='logout'),
     url(r'^search/$', views.user_search, name='search'),
-    url(r'^notfound/$',views.UserNotFound.as_view(), name='notfound')
+    url(r'^notfound/$',views.UserNotFound.as_view(), name='notfound'),
+    url(r'^update_info/(?P<pk>[0-9]+)/$', views.update_info, name='update_info'),
 ]

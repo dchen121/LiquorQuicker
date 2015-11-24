@@ -1,4 +1,14 @@
 {%load staticfiles%}
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
 {%load bootstrap3%}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -29,23 +39,47 @@
 </nav>
 
 {% if user.is_authenticated %}
-<center><h1 style="position:relative">Welcome, {{ object.username }}!</h1></center>
+<link rel="stylesheet" type="text/css" href="{% static 'css/user.css'%}" />
+
+</div><center><h2>{{ object.first_name }} {{ object.last_name }}'s Profile</h2></center>
 {% if user.avatar %}
 <center><img src="{{ object.avatar.url }}" /></center>
 {% endif %}
-<center><h2>{{ object.first_name }} {{ object.last_name }}</h2></center>
-<center>
-	<h2>Favorite Bev:</h2>
-	{% if user == object %}
+
+<span class="header">
+	<center>and {{ object.first_name }}'s favourite store is: {{ object.favorite_store }} {% if user == object %}
     <!--TODO: set up edit -->
 	<a href="blank">edit</a>
-	{% endif %}
-</center>
-<center><p>{{ object.favorite_bev }}</p></center>
-<center>
-	<h2>Favorite Store:</h2>
-</center>
-<center><p>{{ object.favorite_store }}</p></center>
+	{% endif %} </center></div>
+<center>and {{ object.first_name }}'s favourite drink is: {{ object.f_drink }}</center></div>
+	</span>
+
+
+
+
+
+{% if user == object %}
+<span class="row1">
+	<form action="{%url 'profile:update_info' user.id%}" method="POST" class="form" role="form">{% csrf_token %}
+	<div>Update Profile</div>
+    <div class="registerLabel">
+Favourite Drink:
+    </div>
+    <div class="registerTextLabel">
+
+       <input type="text" id="f_drink" class="registerTextDetails" name="f_drink">
+    </div>
+    <div class="registerLabel">
+
+    <div id="registerButtonDiv">
+        <button type="submit" class="btn btn-primary" id="submitRegistration">Update Preferences</button>
+    </div>
+		</div>
+		</form>
+</form></span>
+{% endif %}
+
+
 {% else %}
-<center><h1 style="position:relative">Please log in or register to view your profile</h1></center>
+<center><h1 style="position:relative">Please <a href="{% url 'profile:login' %}">log in</a> or <a href="{% url 'profile:signup' %}">register</a> to view a profile</h1></center>
 {% endif %}
