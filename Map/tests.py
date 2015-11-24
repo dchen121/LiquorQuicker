@@ -173,6 +173,7 @@ class LiquorLocationTests(TestCase):
         prices = store.getPrices()
         self.assertEqual(len(prices), 3)
 
+<<<<<<< HEAD
     def test_average_price_no_prices(self):
         store = LiquorLocation(name="test", address="test", city="test")
         average_price = store.average_price()
@@ -185,6 +186,17 @@ class LiquorLocationTests(TestCase):
         review.save()
         average_price = store.average_price()
         self.assertEqual(average_price, "$30.00")
+
+    def test_get_lat_long_fail(self):
+        store = LiquorLocation(name="Mcbride", address="500 Robson Centre", city="Mcbride")
+        lat_lng = store.get_lat_long()
+        self.assertEqual(lat_lng, None)
+
+    def test_get_lat_long_success(self):
+        store = LiquorLocation(name="Ubc Wesbrook Village", address="3313 Shrum Lane", city="Vancouver")
+        lat_lng = store.get_lat_long()
+        self.assertEqual(lat_lng['lat'], 49.254495)
+        self.assertEqual(lat_lng['lng'], -123.2363483)
 
     def test_average_price_multiple_prices(self):
         store = LiquorLocation(name="test", address="test", city="test")
