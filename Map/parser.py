@@ -56,10 +56,29 @@ class Parser(metaclass=ABCMeta):
         Adds an entry to the given model.
         :param entry: a dictionary entry from the csv file
         :param model: a model from the models module that entry is to be added
+        :param filter: None or the name of a function declared in the subclass
+                       which returns true or false based on some information in
+                       the raw data.
         """
-        if filter is None or self.__class__.__dict__[filter](self, entry):
+        if self.addable(entry, filter):
             data = self.generate_data(entry)
             self.add_to_model(data, model)
+
+    def addable(self, entry, filter):
+        """
+        Determines if the entry is addable based on any filters associated with
+        the model. If filter is set to None returns True.
+        :param entry: the raw data from the csv file in the form of a dictionary
+        :param filter: None or the name of a static function declared in the
+                       subclass which returns true or false based on some
+                       information the raw data.
+        :rtype: bool
+        """
+        if filter is None:
+            return True
+        else:
+            filter_func = self.__class__.__dict__[filter].__func__
+            return filter_func(entry)
 
     def generate_data(self, entry):
         """
@@ -179,7 +198,8 @@ class LocationParser(Parser):
                               'remove_chars': r'[-]+'},
                   'post_code': {'format_string': r'[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]'}}
 
-    def private_store_filter(self, entry):
+    @staticmethod
+    def private_store_filter(entry):
         """
         Returns true if 'type' in entries from the private liquor store file is
         'Private Liquor Store'. Otherwise returns falls

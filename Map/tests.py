@@ -93,6 +93,15 @@ class PriceParserTest(TestCase):
     def test_if_data_is_retrieved(self):
         PriceParser()
 
-        self.assertTrue(BCLiquor.objects.get(name='Cherry Point - Cowichan Blackberry', size=0.375))
-        self.assertTrue(BCLiquor.objects.get(name='Valtellina Sfursat - Aldo Rainoldi 09', size=0.75))
-        self.assertTrue(BCLiquor.objects.get(name='Mill St - Lager Organic', size=0.341))
+        self.assertTrue(BCLiquor.objects.get(category='Wine',
+                                             name='Cherry Point - Cowichan Blackberry',
+                                             size=0.375,
+                                             price=19.89))
+        self.assertTrue(BCLiquor.objects.get(category='Wine',
+                                             name='Valtellina Sfursat - Aldo Rainoldi 09',
+                                             size=0.75,
+                                             price=50.99))
+        self.assertTrue(BCLiquor.objects.get(category='Beer',
+                                             name='Mill St - Lager Organic',
+                                             size=0.341,
+                                             price=11.79))

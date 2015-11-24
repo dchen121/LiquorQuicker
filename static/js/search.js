@@ -11,6 +11,10 @@ $(document).ready(function() {
 	$('#quick-liquor-btn').click(function(e) {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
+				if (currentLocation) {
+					currentLocation.setMap(null);
+					currentLocation = null;
+				}
 				var myLocation = {
 				  lat: position.coords.latitude,
 				  lng: position.coords.longitude
@@ -140,7 +144,7 @@ function linkMarkerToResult(marker, storeId) {
 
     if (resultPosition > paneBottom || resultPosition < paneTop) {
       $(".results-container").animate({
-          scrollTop: resultPosition - 45 - 50
+          scrollTop: resultPosition - paneTop + $('.results-container').scrollTop()
       }, 500);
     }
   });

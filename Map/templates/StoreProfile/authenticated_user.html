@@ -32,6 +32,9 @@
   <button type="submit" class="btn btn-primary">
   {% bootstrap_icon "star" %} Add Review
   </button>
+  {% if store.latitude != null %}
+  <div id="map"></div>
+  {% endif %}
   </div>
   </div>
 </form>

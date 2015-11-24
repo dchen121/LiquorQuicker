@@ -148,7 +148,11 @@
           <div class="col-xs-12">
             <div class="review">
               <em>{{ review.comment}}</em>
+              {% if review.rating != 0 %}
               <h6>Rated {{ review.rating }} of 5 by {{ review.user_name }}</h6>
+              {% else %}
+              <h6>No rating specified by {{ review.user_name }}</h6>
+              {% endif %}
             </div>
           </div>
           {% endfor %}
@@ -159,11 +163,6 @@
 
       </div>
     </div>
-
-    {% if store.latitude != null %}
-    <div id="map"></div>
-    {% endif %}
-
   </div>
 </div>
 
@@ -174,7 +173,7 @@
 
 function initMap() {
 
-  var myLatLng = {lat: {{ latitude }}, lng: {{ longitude }}};
+  var myLatLng = {lat: {{ store.latitude }}, lng: {{ store.longitude }}};
 
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
@@ -182,7 +181,7 @@ function initMap() {
   });
 
   var infowindow = new google.maps.InfoWindow({
-    content: "<div><p color='black'>{{ store }}</p><p>{{ address }}</p></div>"
+    content: "<div><p>{{ store }}</p><p>{{ store.address }}</p></div>"
   });
 
   var marker = new google.maps.Marker({
