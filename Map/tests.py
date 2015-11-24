@@ -173,7 +173,6 @@ class LiquorLocationTests(TestCase):
         prices = store.getPrices()
         self.assertEqual(len(prices), 3)
 
-<<<<<<< HEAD
     def test_average_price_no_prices(self):
         store = LiquorLocation(name="test", address="test", city="test")
         average_price = store.average_price()
