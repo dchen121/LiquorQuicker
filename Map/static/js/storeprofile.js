@@ -12,7 +12,6 @@ $(document).ready(function() {
 
 window.onload = function loadDropdownMenu() {
 
-    var locations = {{ locations|safe }};
     cities = [];
     for (var j = 0; j < locations.length; j++) {
       loc = locations[j];
