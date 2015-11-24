@@ -173,4 +173,27 @@ class LiquorLocationTests(TestCase):
         prices = store.getPrices()
         self.assertEqual(len(prices), 3)
 
+    def test_average_price_no_prices(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        average_price = store.average_price()
+        self.assertEqual(average_price, "No user pricing")
 
+    def test_average_price_one_price(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, price=30)
+        review.save()
+        average_price = store.average_price()
+        self.assertEqual(average_price, "$30.00")
+
+    def test_average_price_multiple_prices(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, price=30)
+        review.save()
+        review_2 = Review(store=store, price=60)
+        review_2.save()
+        review_3 = Review(store=store, price=3)
+        review_3.save()
+        average_price = store.average_price()
+        self.assertEqual(average_price, "$31.00")
