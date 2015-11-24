@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .parser import LocationParser, PriceParser
-from .models import PrivateStore, BCLiquorStore, RuralAgencyStore, BCLiquor
+from .models import LiquorLocation, PrivateStore, BCLiquorStore, RuralAgencyStore, BCLiquor, Review
 
 
 class LocationParserTests(TestCase):
@@ -105,3 +105,30 @@ class PriceParserTest(TestCase):
                                              name='Mill St - Lager Organic',
                                              size=0.341,
                                              price=11.79))
+
+class LiquorLocationTests(TestCase):
+    def test_get_ratings_empty(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        ratings = store.getRatings()
+        self.assertEqual(ratings, [])
+
+    def test_get_ratings_one_rating(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, rating=1)
+        review.save()
+        ratings = store.getRatings()
+        self.assertEqual(ratings, [1])
+
+    def test_get_ratings_multiple_ratings(self):
+        store = LiquorLocation(name="test", address="test", city="test")
+        store.save()
+        review = Review(store=store, rating=1)
+        review.save()
+        review_2 = Review(store=store, rating=2)
+        review_2.save()
+        review_3 = Review(store=store, rating=3)
+        review_3.save()
+        ratings = store.getRatings()
+        self.assertEqual(len(ratings), 3)
