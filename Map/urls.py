@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
@@ -13,4 +14,11 @@ urlpatterns = [
     url(r'^filter/(?P<city>.+)/$', views.filter_by_city, name="filter"),
     url(r'^favourite_store/$', views.favourite_store, name="favourite_store"),
     url(r'^closest_points/$', views.closest_points, name="closest_points"),
+    url(r'^locations/$', views.location_list, name="location_list"),
+    url(r'^location/(?P<pk>[0-9]+)/$', views.location_detail, name="location_detail"),
+    url(r'^reviews/$', views.review_list, name="location_list"),
+    url(r'^location/(?P<pk>[0-9]+)/reviews$', views.location_review_list, name="location_detail"),
+
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

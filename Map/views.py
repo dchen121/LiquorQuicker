@@ -8,6 +8,10 @@ from .forms import ReviewForm
 from datetime import datetime
 from django.core.urlresolvers import reverse
 from . import utils
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from Map.serializers import LiquorLocationSerializer, ReviewSerializer
 
 class MapView(TemplateView):
     """
@@ -126,3 +130,50 @@ def closest_points(request):
             raise Http404("No results found")
         else:
             return HttpResponse(serializers.serialize("json", [sorted_locations[count-1]]), content_type='application/json')
+
+@api_view(['GET'])
+def location_list(request, format=None):
+    if request.method == 'GET':
+        locations = LiquorLocation.objects.all()
+        serializer = LiquorLocationSerializer(locations, many=True)
+        return Response(serializer.data)
+
+    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def location_detail(request, pk, format=None):
+    try:
+        location = LiquorLocation.objects.get(pk=pk)
+    except LiquorLocation.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        serializer = LiquorLocationSerializer(location)
+        return Response(serializer.data)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def review_list(request, format=None):
+    if request.method == 'GET':
+        reviews = Review.objects.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def location_review_list(request, pk, format=None):
+    try:
+        location = LiquorLocation.objects.get(pk=pk)
+    except LiquorLocation.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        reviews = Review.objects.filter(store__pk=pk)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+

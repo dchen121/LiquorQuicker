@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'Map',
     'UserProfile',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (

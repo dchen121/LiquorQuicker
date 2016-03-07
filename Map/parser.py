@@ -186,9 +186,9 @@ class LocationParser(Parser):
               'address': (['ADDRESS', 'address', 'Address'], 'required'),
               'city': (['CITY', 'city', 'Town/City'], 'required'),
               'post_code': (['POSTAL CODE', 'Postal code'], 'optional')}
-    urls = [('http://goo.gl/7AI4ip', (RuralAgencyStore, None)),
-            ('http://goo.gl/88yxeJ', (BCLiquorStore, None)),
-            ('http://goo.gl/730MnE', (PrivateStore, 'private_store_filter'))]
+    urls = [('https://catalogue.data.gov.bc.ca/dataset/f3686275-a70b-458f-a1a7-cdaecbd9d269/resource/07fd8b1e-34af-431b-9b12-392100968ea0/download/CWorking-CopiesOpen-DataJan2016ListsBCLiquorRuralAgencyStoreLocations.csv', (RuralAgencyStore, None)),
+            ('https://catalogue.data.gov.bc.ca/dataset/5fd19e19-e2ee-4326-834f-84de7e653581/resource/0eb7f24c-babb-4dbf-8f43-536e3f8128fa/download/cworkingcopiesopendatabcliquorstorelocations.csv', (BCLiquorStore, None)),
+            ('http://www.pssg.gov.bc.ca/lclb/docs-forms/web_lrs.csv', (PrivateStore, 'private_store_filter'))]
     formatting = {'address': {'format_string': r'(Physical: )?' +
                                                r'([0-9]{3,5} ?- ?)?' +
                                                r'(#[0-9]{1,4} (& #[0-9]{1,4} )?)?' +
