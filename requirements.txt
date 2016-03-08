@@ -4,6 +4,7 @@ django-bootstrap3==6.2.2
 django-haystack==2.4.1
 djangorestframework==3.3.2
 googlemaps==2.3
+gunicorn==19.3.0
 numpy==1.10.1
 Pillow==3.0.0
 requests==2.6.0
