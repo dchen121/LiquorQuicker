@@ -2,7 +2,7 @@
 
 Welcome to LiquorQuicker, the app that helps you get liquor quicker!
 
-Visit [LiquorQuicker](https://morning-wildwood-5541.herokuapp.com/) to get your drink on!
+Visit [LiquorQuicker](https://liquor-quicker.herokuapp.com/) to get your drink on!
 
 ![](https://user-images.githubusercontent.com/6969699/30871731-aa54b190-a29c-11e7-963b-de49c890368e.png)
 
