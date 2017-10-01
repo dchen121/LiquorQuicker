@@ -182,13 +182,13 @@ class Parser(metaclass=ABCMeta):
 
 
 class LocationParser(Parser):
-    naming = {'name': (['NAME', 'establishmentname', 'RAS Store Name'], 'required'),
+    naming = {'name': (['NAME', 'ESTABLISHMENTNAME', 'RAS Store Name'], 'required'),
               'address': (['ADDRESS', 'address', 'Address'], 'required'),
               'city': (['CITY', 'city', 'Town/City'], 'required'),
-              'post_code': (['POSTAL CODE', 'Postal code'], 'optional')}
-    urls = [('https://catalogue.data.gov.bc.ca/dataset/f3686275-a70b-458f-a1a7-cdaecbd9d269/resource/07fd8b1e-34af-431b-9b12-392100968ea0/download/CWorking-CopiesOpen-DataJan2016ListsBCLiquorRuralAgencyStoreLocations.csv', (RuralAgencyStore, None)),
-            ('https://catalogue.data.gov.bc.ca/dataset/5fd19e19-e2ee-4326-834f-84de7e653581/resource/0eb7f24c-babb-4dbf-8f43-536e3f8128fa/download/cworkingcopiesopendatabcliquorstorelocations.csv', (BCLiquorStore, None)),
-            ('http://www.pssg.gov.bc.ca/lclb/docs-forms/web_lrs.csv', (PrivateStore, 'private_store_filter'))]
+              'post_code': (['POSTAL CODE', 'Postal code', 'Postal'], 'optional')}
+    urls = [('https://catalogue.data.gov.bc.ca/dataset/f3686275-a70b-458f-a1a7-cdaecbd9d269/resource/2befb224-7e71-4bc3-b096-93337be39ee2/download/bcliquorruralagencystorelocationsjun2017.csv', (RuralAgencyStore, None)),
+            ('https://catalogue.data.gov.bc.ca/dataset/5fd19e19-e2ee-4326-834f-84de7e653581/resource/a0ffabca-39cc-4e27-a13c-9c1edad357cc/download/bcliquorstorelocationsjun2017.csv', (BCLiquorStore, None)),
+            ('https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/business-management/liquor-regulation-licensing/reports/web_lrs.csv', (PrivateStore, 'private_store_filter'))]
     formatting = {'address': {'format_string': r'(Physical: )?' +
                                                r'([0-9]{3,5} ?- ?)?' +
                                                r'(#[0-9]{1,4} (& #[0-9]{1,4} )?)?' +
@@ -201,13 +201,13 @@ class LocationParser(Parser):
     @staticmethod
     def private_store_filter(entry):
         """
-        Returns true if 'type' in entries from the private liquor store file is
+        Returns true if 'TYPE' in entries from the private liquor store file is
         'Private Liquor Store'. Otherwise returns falls
         :param entry: An entry from the private liquor store csv file
         :return: True if the type is 'Private Liquor Store'
         :rtype: bool
         """
-        if entry['type'] == 'Private Liquor Store':
+        if entry['TYPE'] == 'Private Liquor Store':
             return True
         else:
             return False
